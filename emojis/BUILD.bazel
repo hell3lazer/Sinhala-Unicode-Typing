@@ -1,5 +1,4 @@
 load("@contrib_rules_jvm//java:defs.bzl", "JUNIT5_DEPS", "java_junit5_test")
-load("@rules_java//java:defs.bzl", "java_binary", "java_library")
 
 java_library(
     name = "emoji_utils",
@@ -24,8 +23,8 @@ java_library(
 )
 
 # Data get be taken from https://unicode.org/Public/emoji/latest/emoji-test.txt
-# Usually will run this with (matching sdkTarget in gradle/libs.versions.toml):
-# bazel run //emojis:emoji_generator -- "$PWD/emojis/data/emoji-test.txt" "$PWD/ime/addons/quick_text/src/main/res/xml-v36"
+# Usually will run this with:
+# bazel run //emojis:emoji_generator -- "$PWD/emojis/data/emoji-test.txt" "$PWD/ime/app/src/main/res/xml-v35"
 java_binary(
     name = "emoji_generator",
     srcs = ["EmojiLayoutsGenerator.java"],

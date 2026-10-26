@@ -73,7 +73,7 @@
 
         <Key
             android:codes="115"
-            android:popupCharacters="§ßśŝšșσς"
+            android:popupCharacters="§ßśŝšșσ"
             android:keyEdgeFlags="left"
             android:keyLabel="s" />
 

@@ -12,7 +12,6 @@ on:
       - deployment/halt_deployment_marker
     branches:
       - '*'
-  workflow_dispatch:
 env:
   TERM: dumb
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
@@ -21,8 +20,8 @@ jobs:
   bazel:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6.0.3
-      - uses: bazel-contrib/setup-bazel@0.19.0
+      - uses: actions/checkout@v6.0.2
+      - uses: bazel-contrib/setup-bazel@0.18.0
         with:
           bazelisk-cache: true
           disk-cache: ${{ github.workflow }}
@@ -35,7 +34,9 @@ jobs:
       - name: Github Action Linter
         run: bazel run @multitool//tools/actionlint:cwd -- -config-file "${{ github.workspace }}/.github/actionlint.yaml"
       - name: Code formatting
-        run: bazel run //tools:format.check
+        run: |
+          bazel run //:format
+          if [[ $(git status --porcelain) ]]; then echo "**** run 'bazel run //:format' to fix formatting errors:\n$(git status)\n$(git diff)"; exit 1; fi
       - name: ensure all bazel binaries are working
         run: bazel query 'kind('js_binary', //...) union kind('java_binary', //...)' | xargs -I %s bazel run %s -- -h || true
       - name: bazel code-coverage
@@ -51,14 +52,14 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 2
       - uses: actions/setup-java@v5.2.0
         with:
           distribution: 'temurin'
           java-version: '21'
-      - uses: android-actions/setup-android@v4
+      - uses: android-actions/setup-android@v3.2.2
         with:
           cmdline-tools-version: 13114758
       - name: Install NDK
@@ -86,14 +87,14 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 2
       - uses: actions/setup-java@v5.2.0
         with:
           distribution: 'temurin'
           java-version: '21'
-      - uses: android-actions/setup-android@v4
+      - uses: android-actions/setup-android@v3.2.2
         with:
           cmdline-tools-version: 13114758
       - name: Install NDK
@@ -157,14 +158,14 @@ jobs:
             tasks: "testAllAddOnsUnitTest"
             actual_shard: app
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 2
       - uses: actions/setup-java@v5.2.0
         with:
           distribution: 'temurin'
           java-version: '21'
-      - uses: android-actions/setup-android@v4
+      - uses: android-actions/setup-android@v3.2.2
         with:
           cmdline-tools-version: 13114758
       - name: Install NDK
@@ -202,6 +203,12 @@ jobs:
         with:
           name: tests-${{ matrix.shard_variant }}
           path: collected_reports
+      - uses: actions/upload-artifact@v6.0.0
+        if: always()
+        continue-on-error: true
+        with:
+          name: tests-build-logging-${{ matrix.shard_variant }}
+          path: build/build-logging
   deploy-dry-run:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
@@ -218,20 +225,20 @@ jobs:
             supports_canary: true
             supports_logo: false
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v6.0.2
         with:
           fetch-depth: 2
       - uses: actions/setup-java@v5.2.0
         with:
           distribution: 'temurin'
           java-version: '21'
-      - uses: android-actions/setup-android@v4
+      - uses: android-actions/setup-android@v3.2.2
         with:
           cmdline-tools-version: 13114758
       - name: Install NDK
         run: echo "y" | sdkmanager "ndk;29.0.14206865"
       - name: Install ImageMagick
-        run: sudo apt-get update && sudo apt-get install -y imagemagick
+        run: sudo apt-get install -y imagemagick
       - uses: gradle/actions/setup-gradle@v5
       - name: setup
         run: ./scripts/ci/ci_setup.sh
@@ -287,8 +294,8 @@ jobs:
     if: always()
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6.0.3
-      - uses: bazel-contrib/setup-bazel@0.19.0
+      - uses: actions/checkout@v6.0.2
+      - uses: bazel-contrib/setup-bazel@0.18.0
         with:
           bazelisk-cache: true
           disk-cache: ${{ github.workflow }}
@@ -303,7 +310,7 @@ jobs:
     needs: [all-green-requirement]
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v6.0.2
       - uses: ./.github/actions/deploy-request
         with:
           gh_user: ${{ secrets.BOT_MASTER_RW_GITHUB_USERNAME }}
@@ -315,7 +322,7 @@ jobs:
     needs: [all-green-requirement]
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v6.0.2
         with:
           token: ${{ secrets.BOT_MASTER_RW_GITHUB_TOKEN }}
           fetch-depth: 0
@@ -323,7 +330,7 @@ jobs:
       - name: create-merge-commit
         run: ./scripts/ci/ci_merge_to_default_branch.sh ${{ github.ref }}
       - name: Create pull request
-        uses: peter-evans/create-pull-request@v8.1.1
+        uses: peter-evans/create-pull-request@v8.1.0
         with:
           token: ${{ secrets.BOT_MASTER_RW_GITHUB_TOKEN }}
           commit-message: 'Merge to default branch from ${{ github.ref_name }}.'

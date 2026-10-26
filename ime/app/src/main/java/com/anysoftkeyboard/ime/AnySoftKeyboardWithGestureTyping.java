@@ -1,8 +1,6 @@
 package com.anysoftkeyboard.ime;
 
-import android.app.ActivityManager;
 import android.content.ComponentCallbacks2;
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,18 +57,6 @@ public abstract class AnySoftKeyboardWithGestureTyping extends AnySoftKeyboardWi
       };
   @Nullable private GestureTypingDetector mCurrentGestureDetector;
   private boolean mDetectorReady = false;
-
-  @VisibleForTesting
-  @Nullable
-  protected GestureTypingDetector getCurrentGestureDetector() {
-    return mCurrentGestureDetector;
-  }
-
-  @VisibleForTesting
-  protected boolean isGestureDetectorReady() {
-    return mDetectorReady;
-  }
-
   private boolean mJustPerformedGesture = false;
   private boolean mGestureShifted = false;
 
@@ -97,44 +83,33 @@ public abstract class AnySoftKeyboardWithGestureTyping extends AnySoftKeyboardWi
     super.onCreate();
 
     mClearLastGestureAction = new ClearGestureStripActionProvider(this);
-    if (isLowRamDevice()) {
-      mGestureTypingEnabled = false;
-      destroyAllDetectors();
-    } else {
-      addDisposable(
-          Observable.combineLatest(
-                  PowerSaving.observePowerSavingState(
-                      getApplicationContext(),
-                      R.string.settings_key_power_save_mode_gesture_control),
-                  prefs()
-                      .getBoolean(
-                          R.string.settings_key_gesture_typing,
-                          R.bool.settings_default_gesture_typing)
-                      .asObservable(),
-                  (powerState, gestureTyping) -> {
-                    if (powerState) return false;
-                    return gestureTyping;
-                  })
-              .subscribe(
-                  enabled -> {
-                    mGestureTypingEnabled = enabled;
-                    mDetectorStateSubscription.dispose();
-                    if (!mGestureTypingEnabled) {
-                      destroyAllDetectors();
-                    } else {
-                      final AnyKeyboard currentAlphabetKeyboard = getCurrentAlphabetKeyboard();
-                      if (currentAlphabetKeyboard != null) {
-                        setupGestureDetector(currentAlphabetKeyboard);
-                      }
+    addDisposable(
+        Observable.combineLatest(
+                PowerSaving.observePowerSavingState(
+                    getApplicationContext(), R.string.settings_key_power_save_mode_gesture_control),
+                prefs()
+                    .getBoolean(
+                        R.string.settings_key_gesture_typing,
+                        R.bool.settings_default_gesture_typing)
+                    .asObservable(),
+                (powerState, gestureTyping) -> {
+                  if (powerState) return false;
+                  return gestureTyping;
+                })
+            .subscribe(
+                enabled -> {
+                  mGestureTypingEnabled = enabled;
+                  mDetectorStateSubscription.dispose();
+                  if (!mGestureTypingEnabled) {
+                    destroyAllDetectors();
+                  } else {
+                    final AnyKeyboard currentAlphabetKeyboard = getCurrentAlphabetKeyboard();
+                    if (currentAlphabetKeyboard != null) {
+                      setupGestureDetector(currentAlphabetKeyboard);
                     }
-                  },
-                  GenericOnError.onError("settings_key_gesture_typing")));
-    }
-  }
-
-  protected boolean isLowRamDevice() {
-    ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-    return am != null && am.isLowRamDevice();
+                  }
+                },
+                GenericOnError.onError("settings_key_gesture_typing")));
   }
 
   @Override
@@ -179,15 +154,9 @@ public abstract class AnySoftKeyboardWithGestureTyping extends AnySoftKeyboardWi
     destroyAllDetectors();
   }
 
-  private boolean isGestureTypingSupportedFor(@Nullable AnyKeyboard keyboard) {
-    return keyboard != null
-        && keyboard.supportsGestureTyping()
-        && anyDictionarySupportsGestureTyping(keyboard);
-  }
-
   private void setupGestureDetector(@NonNull AnyKeyboard keyboard) {
     mDetectorStateSubscription.dispose();
-    if (mGestureTypingEnabled && isGestureTypingSupportedFor(keyboard)) {
+    if (mGestureTypingEnabled) {
       final String key = getKeyForDetector(keyboard);
       mCurrentGestureDetector = mGestureTypingDetectors.get(key);
       if (mCurrentGestureDetector == null) {
@@ -221,10 +190,6 @@ public abstract class AnySoftKeyboardWithGestureTyping extends AnySoftKeyboardWi
                     mDetectorReady = false;
                     setupInputViewWatermark();
                   });
-    } else {
-      mCurrentGestureDetector = null;
-      mDetectorReady = false;
-      setupInputViewWatermark();
     }
   }
 
@@ -367,9 +332,7 @@ public abstract class AnySoftKeyboardWithGestureTyping extends AnySoftKeyboardWi
   @Override
   protected DictionaryBackgroundLoader.Listener getDictionaryLoadedListener(
       @NonNull AnyKeyboard currentAlphabetKeyboard) {
-    if (mGestureTypingEnabled
-        && isGestureTypingSupportedFor(currentAlphabetKeyboard)
-        && !mDetectorReady) {
+    if (mGestureTypingEnabled && !mDetectorReady) {
       return new WordListDictionaryListener(currentAlphabetKeyboard, this::onDictionariesLoaded);
     } else {
       return super.getDictionaryLoadedListener(currentAlphabetKeyboard);
@@ -417,10 +380,7 @@ public abstract class AnySoftKeyboardWithGestureTyping extends AnySoftKeyboardWi
   @Override
   public boolean onGestureTypingInputStart(int x, int y, AnyKeyboard.AnyKey key, long eventTime) {
     final GestureTypingDetector currentGestureDetector = mCurrentGestureDetector;
-    if (mGestureTypingEnabled
-        && currentGestureDetector != null
-        && isGestureTypingSupportedFor(getCurrentAlphabetKeyboard())
-        && isValidGestureTypingStart(key)) {
+    if (mGestureTypingEnabled && currentGestureDetector != null && isValidGestureTypingStart(key)) {
       mGestureShifted = mShiftKeyState.isActive();
       // we can call this as many times as we want, it has a short-circuit check.
       confirmLastGesture(mPrefsAutoSpace);

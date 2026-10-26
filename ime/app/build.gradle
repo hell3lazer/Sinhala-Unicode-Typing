@@ -3,7 +3,7 @@ import java.util.stream.Collectors
 
 group 'net.evendanan'
 
-ext.override_app_id = 'com.menny.android.anysoftkeyboard'
+ext.override_app_id = 'com.sinhala.unicode.typing'
 ext.shouldBePublished = true
 ext.override_release_key_alias = 'anysoftkeyboard'
 ext.closedTestingTrackName = 'alpha'
@@ -20,11 +20,23 @@ android {
         println 'crash report email is: ' + support_email_address
 
         buildConfigField "String", "CRASH_REPORT_EMAIL_ADDRESS", '"' + support_email_address + '"'
+
+        multiDexEnabled true
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("../../release.keystore")
+            storePassword "password"
+            keyAlias "release"
+            keyPassword "password"
+        }
     }
 
     buildTypes {
         release {
-            minifyEnabled true
+            signingConfig signingConfigs.release
+            minifyEnabled false
             proguardFiles 'proguard-android-optimize.txt', 'proguard-rules.txt', 'proguard-anysoftkeyboard.txt', 'proguard-dont-obs.txt'
         }
 
@@ -42,12 +54,6 @@ android {
     }
 }
 
-androidComponents {
-    beforeVariants(selector().withBuildType("allAddOns")) { variantBuilder ->
-        variantBuilder.enableUnitTest = true
-    }
-}
-
 //adding TESTING_BUILD
 android {
     buildFeatures {
@@ -55,7 +61,7 @@ android {
     }
     buildTypes {
         release {
-            buildConfigField("boolean", "TESTING_BUILD", "false")
+            buildConfigField("boolean", "TESTING_BUILD", "true")
 
             packagingOptions {
                 //since dictionary jni so files are coming from
@@ -101,15 +107,13 @@ android {
 dependencies {
     implementation project(':api')
     implementation project(':addons:base')
-    implementation project(':addons:languages:english:pack')
+    implementation project(':addons:languages:sinhala:pack')
     implementation project(':ime:base')
     implementation project(':ime:base-rx')
     implementation project(':ime:nextword')
     implementation project(':ime:notification')
     implementation project(':ime:releaseinfo')
     implementation project(':ime:addons')
-    implementation project(':ime:addons:keyboard_themes')
-    implementation project(':ime:addons:quick_text')
     implementation project(':ime:dictionaries')
     implementation project(':ime:dictionaries:jnidictionaryv1')
     implementation project(':ime:dictionaries:jnidictionaryv2')
@@ -139,6 +143,8 @@ dependencies {
     implementation libs.androidx.navigation.fragment
     implementation libs.androidx.navigation.ui
     implementation libs.androidx.navigation.dynamic.features.fragment
+
+    implementation libs.androidx.multidex
 
     testImplementation project(path: ':ime:base-test')
     testImplementation libs.simpleprovider

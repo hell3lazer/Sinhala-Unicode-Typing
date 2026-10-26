@@ -1,80 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:fillViewport="true">
 
-    <TextView
-        style="@style/Ask.Text.Large.Bold"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingBottom="4dp"
-        android:text="@string/setup_wizard_welcome_title" />
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <FrameLayout
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_gravity="center_horizontal">
-        <include layout="@layout/demo_keyboard_include_layout" />
-    </FrameLayout>
+        <TextView
+            style="@style/Ask.Text.Large.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:text="@string/setup_wizard_welcome_title"
+            android:textSize="22sp" />
 
-    <TextView
-        style="@style/Ask.Text.Title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingBottom="4dp"
-        android:text="@string/setup_wizard_welcome_sub_title" />
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="8dp"
+            app:cardBackgroundColor="@color/app_card_background"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingBottom="4dp"
-        android:text="@string/setup_wizard_welcome_info" />
+            <include layout="@layout/demo_keyboard_include_layout" />
+        </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingBottom="4dp"
-        android:text="@string/setup_wizard_welcome_info_2" />
+        <TextView
+            style="@style/Ask.Text.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="@string/setup_wizard_welcome_sub_title" />
 
-    <TextView
-        android:id="@+id/go_to_start_setup"
-        style="@style/Ask.Text.Link"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/transparent_click_feedback_background"
-        android:text="@string/setup_wizard_welcome_start_action" />
+        <TextView
+            style="@style/Ask.Text.Normal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="@string/setup_wizard_welcome_info"
+            android:textColor="?android:textColorSecondary" />
 
-    <TextView
-        style="@style/Ask.Text.Small"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:padding="8dp"
-        android:text="@string/setup_wizard_welcome_info_footnote" />
+        <TextView
+            style="@style/Ask.Text.Normal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:text="@string/setup_wizard_welcome_info_2"
+            android:textColor="?android:textColorSecondary" />
 
-    <TextView
-        android:id="@+id/setup_wizard_welcome_privacy_action"
-        style="@style/Ask.Text.Link"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/transparent_click_feedback_background"
-        android:text="@string/setup_wizard_welcome_privacy_action" />
+        <!-- Primary Action Button -->
+        <TextView
+            android:id="@+id/go_to_start_setup"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/modern_button_primary"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="@string/setup_wizard_welcome_start_action"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/skip_setup_wizard"
-        style="@style/Ask.Text.Link.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/transparent_click_feedback_background"
-        android:text="@string/setup_wizard_skip" />
-</LinearLayout>
+        <TextView
+            style="@style/Ask.Text.Small"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/setup_wizard_welcome_info_footnote"
+            android:textColor="?android:textColorSecondary" />
+
+        <TextView
+            android:id="@+id/setup_wizard_welcome_privacy_action"
+            style="@style/Ask.Text.Link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/transparent_click_feedback_background"
+            android:padding="8dp"
+            android:text="@string/setup_wizard_welcome_privacy_action" />
+
+        <TextView
+            android:id="@+id/skip_setup_wizard"
+            style="@style/Ask.Text.Link.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/transparent_click_feedback_background"
+            android:padding="8dp"
+            android:text="@string/setup_wizard_skip" />
+    </LinearLayout>
+</ScrollView>

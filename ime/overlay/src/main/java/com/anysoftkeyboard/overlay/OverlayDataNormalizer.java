@@ -9,8 +9,7 @@ import androidx.annotation.VisibleForTesting;
 
 public class OverlayDataNormalizer implements OverlyDataCreator {
 
-  public static final int DEFAULT_TEXT_COLOR_DIFF = 96;
-  public static final int GRAY_LUM = luminance(Color.GRAY);
+  private static final int GRAY_LUM = luminance(Color.GRAY);
 
   private final OverlyDataCreator mOriginal;
   private final int mRequiredTextColorDiff;
@@ -40,26 +39,6 @@ public class OverlayDataNormalizer implements OverlyDataCreator {
     return original;
   }
 
-  @NonNull
-  public static OverlayData normalizeSecondary(
-      @NonNull OverlayData original, @IntRange(from = 1, to = 250) int textColorDiff) {
-    if (original.getPrimaryDarkColor() != Color.TRANSPARENT
-        || original.getSecondaryTextColor() != Color.TRANSPARENT) {
-      return normalize(
-          original,
-          textColorDiff,
-          original.getPrimaryDarkColor(),
-          original.getSecondaryTextColor());
-    } else {
-      return original;
-    }
-  }
-
-  @NonNull
-  public static OverlayData normalizeSecondary(@NonNull OverlayData original) {
-    return normalizeSecondary(original, DEFAULT_TEXT_COLOR_DIFF);
-  }
-
   @Override
   public OverlayData createOverlayData(ComponentName remoteApp) {
     final OverlayData original = mOriginal.createOverlayData(remoteApp);
@@ -72,7 +51,7 @@ public class OverlayDataNormalizer implements OverlyDataCreator {
 
   /** Code taken (mostly) from AOSP Color class. */
   @VisibleForTesting
-  public static int luminance(@ColorInt int color) {
+  static int luminance(@ColorInt int color) {
     double r = Color.red(color) * 0.2126;
     double g = Color.green(color) * 0.7152;
     double b = Color.blue(color) * 0.0722;

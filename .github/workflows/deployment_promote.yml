@@ -3,7 +3,6 @@ name: deployment-promote
 on:
   schedule:
     - cron: '04 04 * * *'
-  workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -14,10 +13,10 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        refname: [main, release-branch-addons-v5.2-r1, release-branch-ime-v1.13-r2]
+        refname: [main, release-branch-addons-v5.1-r2, release-branch-ime-v1.13-r1]
       fail-fast: false
     steps:
-      - uses: actions/checkout@v6.0.3
+      - uses: actions/checkout@v6.0.2
         with:
           ref: ${{ matrix.refname }}
       - uses: ./.github/actions/deploy-request

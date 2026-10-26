@@ -13,16 +13,13 @@ public class VersionChangeLogs {
     log.add(
         new VersionChangeLog(
             1,
-            14,
+            0,
             "",
-            Uri.parse("https://github.com/AnySoftKeyboard/AnySoftKeyboard/milestone/96"),
-            "Support for radical-based input methods. Traditional Chinese pack coming.",
-            "Updated emoji support and layouts.",
-            "Modularity and architecture improvements.",
-            "Bug fixes & stability improvements.",
-            "YABTU.",
-            "Updated translations from the community (at crowdin.net)."));
-
+            Uri.parse("https://github.com/sinhala-unicode-typing/v1.0.0"),
+            "Welcome to Sinhala Unicode Typing v1.0.0!",
+            "Adaptive Material Day/Night interface.",
+            "Integrated Sinhala Unicode keyboard with modern pill-shaped action key.",
+            "Custom dark and light themes with optimized Sinhala character layouts."));
     log.add(
         new VersionChangeLog(
             1,

@@ -41,48 +41,38 @@ public class GestureTrailTheme {
     // filling in the defaults
     TypedArray defaultValues =
         askContext.obtainStyledAttributes(
-            R.style.AnyKeyboardGestureTrailTheme,
-            com.anysoftkeyboard.api.R.styleable.GestureTypingTheme);
+            R.style.AnyKeyboardGestureTrailTheme, R.styleable.GestureTypingTheme);
     int maxTrailLength =
-        defaultValues.getInt(
-            com.anysoftkeyboard.api.R.styleable.GestureTypingTheme_gestureTrailMaxSectionsLength,
-            32);
+        defaultValues.getInt(R.styleable.GestureTypingTheme_gestureTrailMaxSectionsLength, 32);
     @ColorInt
     int trailStartColor =
-        defaultValues.getColor(
-            com.anysoftkeyboard.api.R.styleable.GestureTypingTheme_gestureTrailStartColor,
-            Color.BLUE);
+        defaultValues.getColor(R.styleable.GestureTypingTheme_gestureTrailStartColor, Color.BLUE);
     @ColorInt
     int trailEndColor =
-        defaultValues.getColor(
-            com.anysoftkeyboard.api.R.styleable.GestureTypingTheme_gestureTrailEndColor,
-            Color.BLACK);
+        defaultValues.getColor(R.styleable.GestureTypingTheme_gestureTrailEndColor, Color.BLACK);
     float startStrokeSize =
-        defaultValues.getDimension(
-            com.anysoftkeyboard.api.R.styleable.GestureTypingTheme_gestureTrailStartStrokeSize, 0f);
+        defaultValues.getDimension(R.styleable.GestureTypingTheme_gestureTrailStartStrokeSize, 0f);
     float endStrokeSize =
-        defaultValues.getDimension(
-            com.anysoftkeyboard.api.R.styleable.GestureTypingTheme_gestureTrailEndStrokeSize, 0f);
+        defaultValues.getDimension(R.styleable.GestureTypingTheme_gestureTrailEndStrokeSize, 0f);
     defaultValues.recycle();
 
     final int[] remoteStyleableArray =
-        mapper.getRemoteStyleableArrayFromLocal(
-            com.anysoftkeyboard.api.R.styleable.GestureTypingTheme);
+        mapper.getRemoteStyleableArrayFromLocal(R.styleable.GestureTypingTheme);
     TypedArray a = themeContext.obtainStyledAttributes(resId, remoteStyleableArray);
     final int resolvedAttrsCount = a.getIndexCount();
     for (int attrIndex = 0; attrIndex < resolvedAttrsCount; attrIndex++) {
       final int remoteIndex = a.getIndex(attrIndex);
       try {
         int localAttrId = mapper.getLocalAttrId(remoteStyleableArray[remoteIndex]);
-        if (localAttrId == com.anysoftkeyboard.api.R.attr.gestureTrailMaxSectionsLength)
+        if (localAttrId == R.attr.gestureTrailMaxSectionsLength)
           maxTrailLength = a.getInt(remoteIndex, maxTrailLength);
-        else if (localAttrId == com.anysoftkeyboard.api.R.attr.gestureTrailStartColor)
+        else if (localAttrId == R.attr.gestureTrailStartColor)
           trailStartColor = a.getColor(remoteIndex, trailStartColor);
-        else if (localAttrId == com.anysoftkeyboard.api.R.attr.gestureTrailEndColor)
+        else if (localAttrId == R.attr.gestureTrailEndColor)
           trailEndColor = a.getColor(remoteIndex, trailEndColor);
-        else if (localAttrId == com.anysoftkeyboard.api.R.attr.gestureTrailStartStrokeSize)
+        else if (localAttrId == R.attr.gestureTrailStartStrokeSize)
           startStrokeSize = a.getDimension(remoteIndex, startStrokeSize);
-        else if (localAttrId == com.anysoftkeyboard.api.R.attr.gestureTrailEndStrokeSize)
+        else if (localAttrId == R.attr.gestureTrailEndStrokeSize)
           endStrokeSize = a.getDimension(remoteIndex, endStrokeSize);
       } catch (Exception e) {
         Logger.w("ASK_GESTURE_THEME", "Got an exception while reading gesture theme data", e);

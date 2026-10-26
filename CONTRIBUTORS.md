@@ -2,14 +2,14 @@
 
 Thank you for the fine contributors:
 
-1. [menny](https://github.com/menny) (7.1k)
+1. [menny](https://github.com/menny) (7.0k)
 1. [anysoftkeyboard-bot](https://github.com/anysoftkeyboard-bot) (0.7k) 🤖
 1. [herrlado](https://github.com/herrlado) (127)
 1. [ArenaL5](https://github.com/ArenaL5) (76)
 1. [martholomew](https://github.com/martholomew) (74)
 1. [nicoursi](https://github.com/nicoursi) (45)
-1. [google-labs-jules](https://github.com/google-labs-jules) (41) 🤖
 1. [justinmichaud](https://github.com/justinmichaud) (40)
+1. [google-labs-jules](https://github.com/google-labs-jules) (36) 🤖
 1. [abcdrfg777777777](https://github.com/abcdrfg777777777) (35)
 1. [hdlopes](https://github.com/hdlopes) (34)
 1. [lubenard](https://github.com/lubenard) (30)
@@ -28,7 +28,6 @@ Thank you for the fine contributors:
 1. [mirfatif](https://github.com/mirfatif) (9)
 1. [asl97](https://github.com/asl97) (8)
 1. [bjpardal](https://github.com/bjpardal) (8)
-1. [jeffangelion](https://github.com/jeffangelion) (8)
 1. [PFischbeck](https://github.com/PFischbeck) (8)
 1. [Aiq0](https://github.com/Aiq0) (7)
 1. [azzamsa](https://github.com/azzamsa) (7)
@@ -56,7 +55,6 @@ Thank you for the fine contributors:
 1. [asereze](https://github.com/asereze) (4)
 1. [ccoreilly](https://github.com/ccoreilly) (4)
 1. [chrbauer](https://github.com/chrbauer) (4)
-1. [dependabot](https://github.com/dependabot) (4) 🤖
 1. [friesenkiwi](https://github.com/friesenkiwi) (4)
 1. [Luan1Carlos2](https://github.com/Luan1Carlos2) (4)
 1. [PromyLOPh](https://github.com/PromyLOPh) (4)
@@ -80,9 +78,9 @@ Thank you for the fine contributors:
 1. [Unpublished](https://github.com/Unpublished) (3)
 1. [alex73](https://github.com/alex73) (2)
 1. [AngryHands](https://github.com/AngryHands) (2)
-1. [AnXh3L0](https://github.com/AnXh3L0) (2)
 1. [Azim](https://github.com/Azim) (2)
 1. [Blaimi](https://github.com/Blaimi) (2)
+1. [dependabot](https://github.com/dependabot) (2) 🤖
 1. [dgalaktionov](https://github.com/dgalaktionov) (2)
 1. [duchampdev](https://github.com/duchampdev) (2)
 1. [er2off](https://github.com/er2off) (2)
@@ -101,4 +99,6 @@ Thank you for the fine contributors:
 1. [1000283](https://github.com/1000283) (1)
 1. [andrewrabert](https://github.com/andrewrabert) (1)
 1. [Andy3153](https://github.com/Andy3153) (1)
+1. [AnXh3L0](https://github.com/AnXh3L0) (1)
 1. [Apflkuacha](https://github.com/Apflkuacha) (1)
+1. [baduhai](https://github.com/baduhai) (1)

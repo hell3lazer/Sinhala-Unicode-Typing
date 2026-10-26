@@ -432,7 +432,26 @@ bulamıyorum. Bu özellik cihazınızda çalışamaz, üzgünüz.</string>
     <string name="change_symbols_regular">123</string>
     <string name="select_keyboard_popup_title">Klavyeyi seçin</string>
     <!-- dictionaries -->
+    <string name="simley_key_name">Emoji tuşu</string>
+    <string name="short_smiley_key_name">Daha kısa emoji tuşu</string>
+    <string name="quick_text_kaomoji">Japon Duygu Simgeleri</string>
     <string name="history_quick_text_key_name">Geçmiş</string>
+    <string name="default_quick_text_key_name">Basit Duygu Simgeleri</string>
+    <string name="unicode_quick_text_key_name">Duygu Simgeleri</string>
+    <string name="unicode_people_quick_text_key_name">Kişiler</string>
+    <string name="unicode_gestures_quick_text_key_name">Parmak hareketleri</string>
+    <string name="unicode_accessories_quick_text_key_name">Aksesuarlar</string>
+    <string name="unicode_animals_quick_text_key_name">Hayvanlar</string>
+    <string name="unicode_food_quick_text_key_name">Yiyecek</string>
+    <string name="unicode_nature_quick_text_key_name">Doğa</string>
+    <string name="unicode_transport_quick_text_key_name">Taşıma</string>
+    <string name="unicode_signs_quick_text_key_name">İşaretler</string>
+    <string name="unicode_city_quick_text_key_name">Şehir</string>
+    <string name="unicode_scape_quick_text_key_name">Peyzaj</string>
+    <string name="unicode_activity_quick_text_key_name">Aktivite</string>
+    <string name="unicode_office_quick_text_key_name">Ofis</string>
+    <string name="unicode_occasions_quick_text_key_name">Durumlar</string>
+    <string name="unicode_flags_quick_text_key_name">Bayraklar</string>
     <string name="multitap_timeout_title">Çoklu tıklama zaman aşımı</string>
     <string name="multitap_timeout_summary">Tuşlara basma arasındaki zaman aşımı</string>
     <string name="settings_multitap_timeout_disabled">Devre dışı</string>
@@ -596,8 +615,7 @@ https://play.google.com/apps/testing/com.menny.android.anysoftkeyboard \n\nSür�
     <string name="theme_case_type_override_lower">Her zaman küçük harf</string>
     <string name="theme_case_type_override_upper">Her zaman büyük harf</string>
     <string name="settings_hint_size">İpucu etiketi boyutu</string>
-    <string name="settings_key_hint_size_summary">Klavyede ipucu boyutunu ayarlayın. Şu anda, %s
-</string>
+    <string name="settings_key_hint_size_summary">Klavyede ipucu boyutunu ayarlayın. Şu anda, %s</string>
     <string name="settings_key_hint_size_none">Yok</string>
     <string name="settings_key_hint_size_small">Küçük</string>
     <string name="settings_key_hint_size_normal">Normal</string>
@@ -642,8 +660,6 @@ https://play.google.com/apps/testing/com.menny.android.anysoftkeyboard \n\nSür�
     <string name="delete_all_clipboard_entries">Panoyu temizle</string>
     <string name="tip_swipe_from_backspace_to_clear">İpucu: Boşluk tuşundan sola doğru kaydırarak kelimeyi silebilirsiniz!</string>
     <string name="notification_read_contacts_ticker">Kişilere erişim izni gerekli</string>
-    <string name="notification_action_approve_permission">İzni onayla</string>
-    <string name="notification_action_dismiss_permission">Kişiller Sözlüğünü Kapat</string>
     <string name="wizard_allow_notification_permission">AnySoftKeyboard\'dan bildirimlere izin ver</string>
     <string name="setup_wizard_step_notification_permissions_details">Nadir durumlarda (örneğin uygulama çökmeleri gibi) bildirim göndermemiz gerekebilir. İzin verilmesini öneririz ancak bildirim gönderme izin vermeme uygulamanın davranışını etkilemez.</string>
     <string name="wizard_skip_notification_permission">Bildirimlere izin verme</string>

@@ -1,14 +1,15 @@
 [versions]
 # Android SDK and Build Tools
 androidBuildTools = "36.1.0"
-sdkTarget = "36"
-sdkCompile = "37"
+sdkTarget = "35"
+sdkCompile = "36"
 sdkMinimum = "23"
 
 # Android Gradle Plugin and Build Plugins
-agp = "9.4.1"
-kotlin = "2.4.10"
-playPublisher = "4.1.1"
+agp = "8.13.2"
+kotlin = "2.3.21"
+spotless = "8.5.1"
+playPublisher = "3.13.0"
 errorpronePlugin = "4.4.0"
 navigationSafeArgs = "2.9.8"
 
@@ -21,6 +22,7 @@ androidxConstraintlayout = "2.2.1"
 androidxCore = "1.18.0"
 androidxFragment = "1.8.9"
 androidxLegacySupport = "1.0.0"
+androidxMultidex = "2.0.1"
 androidxNavigation = "2.9.8"
 androidxPalette = "1.0.0"
 androidxPreference = "1.2.1"
@@ -32,10 +34,6 @@ androidxTestCore = "1.7.0"
 androidxTestCoreOld = "1.7.0"
 androidxTestJunit = "1.3.0"
 androidxFragmentTesting = "1.8.9"
-
-# AndroidX Compose
-androidxActivityCompose = "1.10.0"
-androidxComposeBom = "2025.12.00"
 
 # Google Libraries
 material = "1.14.0"
@@ -53,8 +51,8 @@ materialtabstrip = "1.1.1"
 easypermissions = "3.0.0"
 
 # ErrorProne
-errorproneCore = "2.50.0"
-errorproneAnnotations = "2.50.0"
+errorproneCore = "2.49.0"
+errorproneAnnotations = "2.49.0"
 
 # Testing
 junit = "4.13.2"
@@ -67,7 +65,7 @@ simpleprovider = "1.1.0"
 # BuildSrc Dependencies
 gson = "2.14.0"
 httpclient = "4.5.14"
-kotlinReflect = "2.4.10"
+kotlinReflect = "2.3.21"
 jsoup = "1.22.2"
 guava = "24.1.1-jre"
 
@@ -83,6 +81,7 @@ androidx-fragment = { module = "androidx.fragment:fragment", version.ref = "andr
 androidx-legacy-support-core-utils = { module = "androidx.legacy:legacy-support-core-utils", version.ref = "androidxLegacySupport" }
 androidx-legacy-support-v13 = { module = "androidx.legacy:legacy-support-v13", version.ref = "androidxLegacySupport" }
 androidx-legacy-support-v4 = { module = "androidx.legacy:legacy-support-v4", version.ref = "androidxLegacySupport" }
+androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "androidxMultidex" }
 androidx-navigation-dynamic-features-fragment = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "androidxNavigation" }
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment", version.ref = "androidxNavigation" }
 androidx-navigation-ui = { module = "androidx.navigation:navigation-ui", version.ref = "androidxNavigation" }
@@ -96,17 +95,6 @@ androidx-test-core = { module = "androidx.test:core", version.ref = "androidxTes
 androidx-test-core-old = { module = "androidx.test:core", version.ref = "androidxTestCoreOld" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidxTestJunit" }
 androidx-fragment-testing = { module = "androidx.fragment:fragment-testing", version.ref = "androidxFragmentTesting" }
-
-# AndroidX Compose
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivityCompose" }
-androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
-androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
-androidx-compose-ui = { module = "androidx.compose.ui:ui" }
-androidx-compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
-androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
-androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
-androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 
 # Google
 material = { module = "com.google.android.material:material", version.ref = "material" }
@@ -146,7 +134,7 @@ guava = { module = "com.google.guava:guava", version.ref = "guava" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 play-publisher = { id = "com.github.triplet.play", version.ref = "playPublisher" }
 errorprone = { id = "net.ltgt.errorprone", version.ref = "errorpronePlugin" }
 navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "navigationSafeArgs" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

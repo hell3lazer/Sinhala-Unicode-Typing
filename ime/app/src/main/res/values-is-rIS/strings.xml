@@ -248,12 +248,6 @@
     <string name="auto_pick_suggestion_aggressiveness_summary">Stig kröfuhörku: %s</string>
     <string name="use_contacts_dictionary">Orðasafn tengiliða</string>
     <string name="use_contacts_dictionary_on_summary">Stinga upp á nöfnum úr tengiliðalista</string>
-    <string name="radical_overlay_dir_title">Veldu möppu fyrir stofnatöflu (radicals)</string>
-    <string name="radical_overlay_dir_summary_picked">Nota möppuna: %1$s. Ýttu til að nota aðra möppu.</string>
-    <string name="radical_overlay_dir_summary_lost">Valin mappa er ekki lengur aðgengileg. Ýttu til að velja aftur.</string>
-    <string name="radical_overlay_reset_title">Frumstilla á sjálfgefna möppu</string>
-    <string name="radical_overlay_refresh_title">Endurlesa innfluttar stofnatöflur (radicals)</string>
-    <string name="radical_overlay_toast_pick_failed">Tókst ekki að vista val á möppu: %1$s</string>
     <string name="tweaks_group">Sérbreytingar</string>
     <string name="tweak_sound_group">Sérbreytingar tengdar hljóði</string>
     <string name="tweak_physical_keyboard_group">Sérbreytingar lyklaborðs</string>
@@ -474,7 +468,26 @@
     <string name="change_symbols_regular">123</string>
     <string name="select_keyboard_popup_title">Veldu lyklaborð</string>
     <!-- dictionaries -->
+    <string name="simley_key_name">Broskallalykill</string>
+    <string name="short_smiley_key_name">Styttri broskallalykill</string>
+    <string name="quick_text_kaomoji">Kaomoji</string>
     <string name="history_quick_text_key_name">Ferill</string>
+    <string name="default_quick_text_key_name">Einföld tjáningartákn</string>
+    <string name="unicode_quick_text_key_name">Tjáningartákn</string>
+    <string name="unicode_people_quick_text_key_name">Fólk</string>
+    <string name="unicode_gestures_quick_text_key_name">Bendingar</string>
+    <string name="unicode_accessories_quick_text_key_name">Fylgihlutir</string>
+    <string name="unicode_animals_quick_text_key_name">Dýr</string>
+    <string name="unicode_food_quick_text_key_name">Matur</string>
+    <string name="unicode_nature_quick_text_key_name">Náttúra</string>
+    <string name="unicode_transport_quick_text_key_name">Samgöngur</string>
+    <string name="unicode_signs_quick_text_key_name">Merki</string>
+    <string name="unicode_city_quick_text_key_name">Borg</string>
+    <string name="unicode_scape_quick_text_key_name">Senur</string>
+    <string name="unicode_activity_quick_text_key_name">Athafnir</string>
+    <string name="unicode_office_quick_text_key_name">Skrifstofa</string>
+    <string name="unicode_occasions_quick_text_key_name">Tilefni</string>
+    <string name="unicode_flags_quick_text_key_name">Fánar</string>
     <string name="multitap_timeout_title">Tímamörk milli margra áslátta</string>
     <string name="multitap_timeout_summary">Tímamörk á milli ásláttar lykla</string>
     <string name="settings_multitap_timeout_disabled">Óvirkt</string>
@@ -520,8 +533,7 @@
     <!-- abbreviations editor -->
     <string name="abbreviation_dict_settings_titlebar">Styttingaritill</string>
     <string name="abbreviation_dict_editor">Styttingaritill</string>
-    <string name="abbreviation_dict_word_template">
-        <i>
+    <string name="abbreviation_dict_word_template">        <i>
             <xliff:g id="abbreviation">%s</xliff:g>
         </i>
         \u0020\u2192\u0020
@@ -608,8 +620,7 @@
     <string name="setup_wizard_step_three_title">Hvað næst</string>
     <string name="setup_wizard_step_three_details">Takk fyrir að velja <i>AnySoftKeyboard</i>.
     </string>
-    <string name="setup_wizard_step_three_details_done">
-        <b>Þessu er lokið 🎉\nFarðu í eftirlætisforritið þitt til að próf þetta.</b>
+    <string name="setup_wizard_step_three_details_done">        <b>Þessu er lokið 🎉\nFarðu í eftirlætisforritið þitt til að próf þetta.</b>
     </string>
     <string name="setup_wizard_step_three_details_actions">Eða að þú getur sérsniðið og aðlagað
         lyklaborðið að þínum þörfum:
@@ -714,7 +725,6 @@
     <string name="allow_layouts_to_provide_generic_rows_on_summary">Leyfa framsetningum að taka yfir almennar raðir.</string>
     <string name="gesture_typing_settings">Bendingainnsláttur ➿</string>
     <string name="gesture_typing_summary">Settu inn orð með því að renna fingri í gegnum stafi þess.</string>
-    <string name="gesture_typing_disabled_low_ram">Innsláttur með bendingum er gerður óvirkur á tækjum með lítið minni til að tryggja hnökralausan innslátt.</string>
     <string name="gesture_typing_action">Virkja bendingainnslátt [BETA]</string>
     <string name="gesture_typing_alert_title">BETA-prófunareiginleiki!</string>
     <string name="gesture_typing_alert_message">Bendingainnsláttur ➿ er í <b>beta</b>-prófunum. Hann er með ýmsa galla, er ekki nægilega hraðvirkur og er ekki fullskrifaður.\nSamt sem áður er þess virði að prófa þessa eiginleika.</string>
@@ -740,7 +750,4 @@
     <string name="wizard_allow_notification_permission">Leyfa tilkynningar frá AnySoftKeyboard</string>
     <string name="setup_wizard_step_notification_permissions_details">Í einstaka tilfellum (t.d. þegar forritið hrynur) þarf að birta tilkynningu á tækinu. Mælt er með því að það sé leyft, en þótt tilkynningar séu ekki leyfðar hefur það ekki áhrif á hegðun forritsins.</string>
     <string name="wizard_skip_notification_permission">Ekki leyfa tilkynningar</string>
-    <string name="touch_trajectory_correction_title">Leiðrétting snertiferils</string>
-    <string name="touch_trajectory_correction_summary_on">Bættu nákvæmni lykla með því að sameina hnit snertingar og lyftingar við hraðan innslátt</string>
-    <string name="touch_trajectory_correction_summary_off">Reiða sig einvörðungu á hnit lyftingar</string>
 </resources>

@@ -5,6 +5,7 @@ import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import android.text.TextUtils;
 import com.anysoftkeyboard.AnySoftKeyboardRobolectricTestRunner;
 import com.menny.android.anysoftkeyboard.AnyApplication;
+import com.menny.android.anysoftkeyboard.R;
 import java.util.List;
 import java.util.Locale;
 import org.junit.Assert;
@@ -66,7 +67,7 @@ public class LoadedKeyboardsVerificationTest {
     final int apiApiVersion =
         getApplicationContext()
             .getResources()
-            .getInteger(com.anysoftkeyboard.api.R.integer.anysoftkeyboard_api_version_code);
+            .getInteger(R.integer.anysoftkeyboard_api_version_code);
     for (KeyboardAddOnAndBuilder addOn : addOns) {
       final String addOnIdString = "Add-on with ID " + addOn.getId();
       Assert.assertEquals(addOnIdString, apiApiVersion, addOn.getApiVersion());

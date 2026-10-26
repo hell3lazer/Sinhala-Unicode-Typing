@@ -16,7 +16,6 @@
 
 package com.menny.android.anysoftkeyboard;
 
-import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.util.Pair;
+import androidx.multidex.MultiDexApplication;
 import com.anysoftkeyboard.addons.AddOnsFactory;
 import com.anysoftkeyboard.android.NightMode;
 import com.anysoftkeyboard.base.utils.Logger;
@@ -72,7 +72,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class AnyApplication extends Application {
+public class AnyApplication extends MultiDexApplication {
 
   static final String PREF_KEYS_FIRST_INSTALLED_APP_VERSION =
       "settings_key_first_app_version_installed";
@@ -170,8 +170,7 @@ public class AnyApplication extends Application {
     if (Build.VERSION.SDK_INT < 26) return new DeviceSpecificV24();
     if (Build.VERSION.SDK_INT < 28) return new DeviceSpecificV26();
     if (Build.VERSION.SDK_INT < 29) return new DeviceSpecificV28();
-    if (Build.VERSION.SDK_INT < 33) return new DeviceSpecificV29();
-    return new com.anysoftkeyboard.devicespecific.DeviceSpecificV33();
+    return new DeviceSpecificV29();
   }
 
   @Override

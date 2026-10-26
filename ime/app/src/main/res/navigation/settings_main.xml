@@ -106,8 +106,7 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
-    </fragment>
-    <fragment
+    </fragment>    <fragment
         android:id="@+id/aboutAnySoftKeyboardFragment"
         android:name="com.anysoftkeyboard.ui.settings.AboutAnySoftKeyboardFragment"
         android:label="AboutAnySoftKeyboardFragment" >

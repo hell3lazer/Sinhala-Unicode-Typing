@@ -16,7 +16,6 @@
 
 package com.anysoftkeyboard.ui.settings;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -41,11 +40,11 @@ public class GesturesSettingsFragment extends PreferenceFragmentCompat {
   public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
     addPreferencesFromResource(R.xml.prefs_gestures_prefs);
     mGeneralDialogController =
-        new GeneralDialogController(
-            getActivity(), net.evendanan.pixel.R.style.Theme_AskAlertDialog, this::setupDialog);
+        new GeneralDialogController(getActivity(), R.style.Theme_AskAlertDialog, this::setupDialog);
   }
 
-  private void setupDialog(AlertDialog.Builder builder, int optionId, Object data) {
+  private void setupDialog(
+      Context context, AlertDialog.Builder builder, int optionId, Object data) {
     builder
         .setTitle(R.string.gesture_typing_alert_title)
         .setMessage(R.string.gesture_typing_alert_message)
@@ -68,13 +67,8 @@ public class GesturesSettingsFragment extends PreferenceFragmentCompat {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    Preference gesturePref = findPreference(getString(R.string.settings_key_gesture_typing));
-    if (gesturePref != null) {
-      if (isLowRamDevice()) {
-        gesturePref.setEnabled(false);
-        gesturePref.setSummary(R.string.gesture_typing_disabled_low_ram);
-      } else {
-        gesturePref.setOnPreferenceChangeListener(
+    findPreference(getString(R.string.settings_key_gesture_typing))
+        .setOnPreferenceChangeListener(
             (preference, newValue) -> {
               final boolean gestureTypingEnabled = (boolean) newValue;
               if (gestureTypingEnabled) {
@@ -85,17 +79,6 @@ public class GesturesSettingsFragment extends PreferenceFragmentCompat {
               }
               return true;
             });
-      }
-    }
-  }
-
-  protected boolean isLowRamDevice() {
-    Context context = getContext();
-    if (context != null) {
-      ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-      return am != null && am.isLowRamDevice();
-    }
-    return false;
   }
 
   @Override
@@ -108,10 +91,7 @@ public class GesturesSettingsFragment extends PreferenceFragmentCompat {
   @Override
   public void onStart() {
     super.onStart();
-    UiUtils.setActivityTitle(
-        this,
-        getString(
-            com.anysoftkeyboard.addons.quicktext.R.string.unicode_gestures_quick_text_key_name));
+    UiUtils.setActivityTitle(this, getString(R.string.unicode_gestures_quick_text_key_name));
 
     final boolean gestureTypingEnabled =
         ((CheckBoxPreference) findPreference(getString(R.string.settings_key_gesture_typing)))

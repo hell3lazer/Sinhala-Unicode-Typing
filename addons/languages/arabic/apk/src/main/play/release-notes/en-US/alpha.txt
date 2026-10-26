@@ -1,2 +1,1 @@
-* Added new SwiftKey layout.
 * Fixes to Alif pop-up.

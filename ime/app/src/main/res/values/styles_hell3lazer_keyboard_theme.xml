@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="Hell3LazerBlueKeyIconTheme" parent="@style/AnyKeyboardBaseKeyIconTheme">
+        <item name="iconKeyShift">@drawable/hell3lazer_blue_shift_selector</item>
+        <item name="iconKeyBackspace">@drawable/hell3lazer_blue_ic_backspace</item>
+        <item name="iconKeyAction">@drawable/hell3lazer_blue_ic_enter</item>
+        <item name="iconKeySpace">@null</item>
+    </style>
+
+    <style name="Hell3LazerBlueTheme" parent="@style/YocheesBaseTheme">
+        <item name="android:background">@drawable/hell3lazer_blue_main_background</item>
+        <item name="keyBackground">@drawable/hell3lazer_blue_key</item>
+        <item name="keyTextColor">#8e97a0</item>
+        <item name="keyboardNameTextColor">#5e6770</item>
+
+        <!-- key preview (feedback) -->
+        <item name="keyPreviewBackground">@drawable/dark_btn_key_preview_background</item>
+        <item name="keyPreviewTextColor">#8e97a0</item>
+        <item name="previewGestureTextColor">#5e6770</item>
+        <item name="hintTextSize">0px</item>
+
+        <!-- suggestion strip -->
+        <item name="suggestionNormalTextColor">#5e6770</item>
+        <item name="suggestionRecommendedTextColor">#8e97a0</item>
+        <item name="suggestionOthersTextColor">#5e6770</item>
+        <item name="suggestionSelectionHighlight">@drawable/dark_candidate_selected_background</item>
+        <item name="suggestionTextSize">@dimen/candidate_font_height</item>
+        <item name="suggestionBackgroundImage">@drawable/hell3lazer_blue_main_background</item>
+        <item name="suggestionCloseImage">@drawable/yochees_dark_close_suggetions</item>
+    </style>
+
+    <style name="Hell3LazerBluePopup" parent="@style/YocheesBaseTheme">
+        <item name="android:background">@drawable/hell3lazer_blue_popup_background</item>
+        <item name="android:paddingLeft">0px</item>
+        <item name="android:paddingTop">0px</item>
+        <item name="android:paddingRight">0px</item>
+        <item name="android:paddingBottom">0px</item>
+        <item name="verticalCorrection">-0.26in</item>
+        <item name="keyPreviewTextSize">0px</item>
+        <item name="hintTextSize">0px</item>
+
+        <item name="keyBackground">@drawable/hell3lazer_blue_key</item>
+        <item name="keyTextColor">#8e97a0</item>
+    </style>
+
+    <style name="Hell3LazerDarkKeyIconTheme" parent="@style/AnyKeyboardBaseKeyIconTheme">
+        <item name="iconKeyShift">@drawable/hell3lazer_shift_selector</item>
+        <item name="iconKeyBackspace">@drawable/hell3lazer_ic_backspace</item>
+        <item name="iconKeyAction">@drawable/hell3lazer_ic_enter</item>
+        <item name="iconKeySpace">@null</item>
+    </style>
+
+    <style name="Hell3LazerDarkTheme" parent="@style/YocheesBaseTheme">
+        <item name="android:background">@drawable/hell3lazer_dark_main_background</item>
+        <item name="keyBackground">@drawable/hell3lazer_dark_key</item>
+        <item name="keyTextColor">#ffffff</item>
+        <item name="keyboardNameTextColor">#a0a0a0</item>
+
+        <!-- key preview (feedback) -->
+        <item name="keyPreviewBackground">@drawable/dark_btn_key_preview_background</item>
+        <item name="keyPreviewTextColor">#ffffff</item>
+        <item name="previewGestureTextColor">#a0a0a0</item>
+        <item name="hintTextSize">0px</item>
+
+        <!-- suggestion strip -->
+        <item name="suggestionNormalTextColor">#a0a0a0</item>
+        <item name="suggestionRecommendedTextColor">#ffffff</item>
+        <item name="suggestionOthersTextColor">#a0a0a0</item>
+        <item name="suggestionSelectionHighlight">@drawable/dark_candidate_selected_background</item>
+        <item name="suggestionTextSize">@dimen/candidate_font_height</item>
+        <item name="suggestionBackgroundImage">@drawable/hell3lazer_dark_main_background</item>
+        <item name="suggestionCloseImage">@drawable/close_suggestions_dark</item>
+    </style>
+
+    <style name="Hell3LazerDarkPopup" parent="@style/YocheesBaseTheme">
+        <item name="android:background">@drawable/hell3lazer_dark_popup_background</item>
+        <item name="android:paddingLeft">0px</item>
+        <item name="android:paddingTop">0px</item>
+        <item name="android:paddingRight">0px</item>
+        <item name="android:paddingBottom">0px</item>
+        <item name="verticalCorrection">-0.26in</item>
+        <item name="keyPreviewTextSize">0px</item>
+        <item name="hintTextSize">0px</item>
+
+        <item name="keyBackground">@drawable/hell3lazer_dark_key</item>
+        <item name="keyTextColor">#ffffff</item>
+    </style>
+
+
+    <style name="Hell3LazertlKeyIconTheme" parent="@style/AnyKeyboardBaseKeyIconTheme">
+        <item name="iconKeyShift">@drawable/hell3lazer_tl_shift_selector</item>
+        <item name="iconKeyBackspace">@drawable/hell3lazer_tl_ic_backspace</item>
+        <item name="iconKeyAction">@drawable/hell3lazer_tl_ic_enter</item>
+        <item name="iconKeySpace">@null</item>
+    </style>
+
+    <style name="Hell3LazertlTheme" parent="@style/YocheesBaseTheme">
+        <item name="android:background">@drawable/hell3lazer_tl_main_background</item>
+        <item name="keyBackground">@drawable/hell3lazer_tl_key</item>
+        <item name="keyTextColor">#ffffff</item>
+        <item name="keyboardNameTextColor">#a0a0a0</item>
+
+        <item name="keyPreviewBackground">@drawable/dark_btn_key_preview_background</item>
+        <item name="keyPreviewTextColor">#ffffff</item>
+        <item name="previewGestureTextColor">#a0a0a0</item>
+        <item name="hintTextSize">0px</item>
+
+        <item name="suggestionNormalTextColor">#a0a0a0</item>
+        <item name="suggestionRecommendedTextColor">#ffffff</item>
+        <item name="suggestionOthersTextColor">#a0a0a0</item>
+        <item name="suggestionSelectionHighlight">@drawable/dark_candidate_selected_background</item>
+        <item name="suggestionTextSize">@dimen/candidate_font_height</item>
+        <item name="suggestionBackgroundImage">@drawable/hell3lazer_tl_main_background</item>
+        <item name="suggestionCloseImage">@drawable/close_suggestions_dark</item>
+    </style>
+
+    <style name="Hell3LazertlPopup" parent="@style/YocheesBaseTheme">
+        <item name="android:background">@drawable/hell3lazer_tl_popup_background</item>
+        <item name="android:paddingLeft">0px</item>
+        <item name="android:paddingTop">0px</item>
+        <item name="android:paddingRight">0px</item>
+        <item name="android:paddingBottom">0px</item>
+        <item name="verticalCorrection">-0.26in</item>
+        <item name="keyPreviewTextSize">0px</item>
+        <item name="hintTextSize">0px</item>
+
+        <item name="keyBackground">@drawable/hell3lazer_tl_key</item>
+        <item name="keyTextColor">#ffffff</item>
+    </style>
+
+    <style name="Hell3LazertrKeyIconTheme" parent="@style/AnyKeyboardBaseKeyIconTheme">
+        <item name="iconKeyShift">@drawable/hell3lazer_tr_shift_selector</item>
+        <item name="iconKeyBackspace">@drawable/hell3lazer_tr_ic_backspace</item>
+        <item name="iconKeyAction">@drawable/hell3lazer_tr_ic_enter</item>
+        <item name="iconKeySpace">@null</item>
+    </style>
+
+    <style name="Hell3LazertrTheme" parent="@style/YocheesBaseTheme">
+        <item name="android:background">@drawable/hell3lazer_tr_main_background</item>
+        <item name="keyBackground">@drawable/hell3lazer_tr_key</item>
+        <item name="keyTextColor">#ffffff</item>
+        <item name="keyboardNameTextColor">#a0a0a0</item>
+
+        <item name="keyPreviewBackground">@drawable/dark_btn_key_preview_background</item>
+        <item name="keyPreviewTextColor">#ffffff</item>
+        <item name="previewGestureTextColor">#a0a0a0</item>
+        <item name="hintTextSize">0px</item>
+
+        <item name="suggestionNormalTextColor">#a0a0a0</item>
+        <item name="suggestionRecommendedTextColor">#ffffff</item>
+        <item name="suggestionOthersTextColor">#a0a0a0</item>
+        <item name="suggestionSelectionHighlight">@drawable/dark_candidate_selected_background</item>
+        <item name="suggestionTextSize">@dimen/candidate_font_height</item>
+        <item name="suggestionBackgroundImage">@drawable/hell3lazer_tr_main_background</item>
+        <item name="suggestionCloseImage">@drawable/close_suggestions_dark</item>
+    </style>
+
+    <style name="Hell3LazertrPopup" parent="@style/YocheesBaseTheme">
+        <item name="android:background">@drawable/hell3lazer_tr_popup_background</item>
+        <item name="android:paddingLeft">0px</item>
+        <item name="android:paddingTop">0px</item>
+        <item name="android:paddingRight">0px</item>
+        <item name="android:paddingBottom">0px</item>
+        <item name="verticalCorrection">-0.26in</item>
+        <item name="keyPreviewTextSize">0px</item>
+        <item name="hintTextSize">0px</item>
+
+        <item name="keyBackground">@drawable/hell3lazer_tr_key</item>
+        <item name="keyTextColor">#ffffff</item>
+    </style>
+
+    <style name="Hell3LazerblKeyIconTheme" parent="@style/AnyKeyboardBaseKeyIconTheme">
+        <item name="iconKeyShift">@drawable/hell3lazer_bl_shift_selector</item>
+        <item name="iconKeyBackspace">@drawable/hell3lazer_bl_ic_backspace</item>
+        <item name="iconKeyAction">@drawable/hell3lazer_bl_ic_enter</item>
+        <item name="iconKeySpace">@null</item>
+    </style>
+
+    <style name="Hell3LazerblTheme" parent="@style/YocheesBaseTheme">
+        <item name="android:background">@drawable/hell3lazer_bl_main_background</item>
+        <item name="keyBackground">@drawable/hell3lazer_bl_key</item>
+        <item name="keyTextColor">#333333</item>
+        <item name="keyboardNameTextColor">#5e6770</item>
+
+        <item name="keyPreviewBackground">@drawable/dark_btn_key_preview_background</item>
+        <item name="keyPreviewTextColor">#333333</item>
+        <item name="previewGestureTextColor">#5e6770</item>
+        <item name="hintTextSize">0px</item>
+
+        <item name="suggestionNormalTextColor">#5e6770</item>
+        <item name="suggestionRecommendedTextColor">#333333</item>
+        <item name="suggestionOthersTextColor">#5e6770</item>
+        <item name="suggestionSelectionHighlight">@drawable/dark_candidate_selected_background</item>
+        <item name="suggestionTextSize">@dimen/candidate_font_height</item>
+        <item name="suggestionBackgroundImage">@drawable/hell3lazer_bl_main_background</item>
+        <item name="suggestionCloseImage">@drawable/close_suggestions_dark</item>
+    </style>
+
+    <style name="Hell3LazerblPopup" parent="@style/YocheesBaseTheme">
+        <item name="android:background">@drawable/hell3lazer_bl_popup_background</item>
+        <item name="android:paddingLeft">0px</item>
+        <item name="android:paddingTop">0px</item>
+        <item name="android:paddingRight">0px</item>
+        <item name="android:paddingBottom">0px</item>
+        <item name="verticalCorrection">-0.26in</item>
+        <item name="keyPreviewTextSize">0px</item>
+        <item name="hintTextSize">0px</item>
+
+        <item name="keyBackground">@drawable/hell3lazer_bl_key</item>
+        <item name="keyTextColor">#333333</item>
+    </style>
+
+    <style name="Hell3LazerbrKeyIconTheme" parent="@style/AnyKeyboardBaseKeyIconTheme">
+        <item name="iconKeyShift">@drawable/hell3lazer_br_shift_selector</item>
+        <item name="iconKeyBackspace">@drawable/hell3lazer_br_ic_backspace</item>
+        <item name="iconKeyAction">@drawable/hell3lazer_br_ic_enter</item>
+        <item name="iconKeySpace">@null</item>
+    </style>
+
+    <style name="Hell3LazerbrTheme" parent="@style/YocheesBaseTheme">
+        <item name="android:background">@drawable/hell3lazer_br_main_background</item>
+        <item name="keyBackground">@drawable/hell3lazer_br_key</item>
+        <item name="keyTextColor">#333333</item>
+        <item name="keyboardNameTextColor">#5e6770</item>
+
+        <item name="keyPreviewBackground">@drawable/dark_btn_key_preview_background</item>
+        <item name="keyPreviewTextColor">#333333</item>
+        <item name="previewGestureTextColor">#5e6770</item>
+        <item name="hintTextSize">0px</item>
+
+        <item name="suggestionNormalTextColor">#5e6770</item>
+        <item name="suggestionRecommendedTextColor">#333333</item>
+        <item name="suggestionOthersTextColor">#5e6770</item>
+        <item name="suggestionSelectionHighlight">@drawable/dark_candidate_selected_background</item>
+        <item name="suggestionTextSize">@dimen/candidate_font_height</item>
+        <item name="suggestionBackgroundImage">@drawable/hell3lazer_br_main_background</item>
+        <item name="suggestionCloseImage">@drawable/close_suggestions_dark</item>
+    </style>
+
+    <style name="Hell3LazerbrPopup" parent="@style/YocheesBaseTheme">
+        <item name="android:background">@drawable/hell3lazer_br_popup_background</item>
+        <item name="android:paddingLeft">0px</item>
+        <item name="android:paddingTop">0px</item>
+        <item name="android:paddingRight">0px</item>
+        <item name="android:paddingBottom">0px</item>
+        <item name="verticalCorrection">-0.26in</item>
+        <item name="keyPreviewTextSize">0px</item>
+        <item name="hintTextSize">0px</item>
+
+        <item name="keyBackground">@drawable/hell3lazer_br_key</item>
+        <item name="keyTextColor">#333333</item>
+    </style>
+
+
+    <style name="Hell3LazerLightBlueKeyIconTheme" parent="@style/AnyKeyboardBaseKeyIconTheme">
+        <item name="iconKeyShift">@drawable/hell3lazer_light_blue_shift_selector</item>
+        <item name="iconKeyBackspace">@drawable/hell3lazer_light_blue_ic_backspace</item>
+        <item name="iconKeyAction">@drawable/hell3lazer_light_blue_ic_enter</item>
+        <item name="iconKeySpace">@null</item>
+    </style>
+
+    <style name="Hell3LazerLightBlueTheme" parent="@style/YocheesBaseTheme">
+        <item name="android:background">@drawable/hell3lazer_light_blue_main_background</item>
+        <item name="keyBackground">@drawable/hell3lazer_light_blue_key</item>
+        <item name="keyTextColor">#1d232a</item>
+        <item name="keyboardNameTextColor">#5e6770</item>
+
+        <item name="keyPreviewBackground">@drawable/dark_btn_key_preview_background</item>
+        <item name="keyPreviewTextColor">#1d232a</item>
+        <item name="previewGestureTextColor">#5e6770</item>
+        <item name="hintTextSize">0px</item>
+
+        <item name="suggestionNormalTextColor">#5e6770</item>
+        <item name="suggestionRecommendedTextColor">#1d232a</item>
+        <item name="suggestionOthersTextColor">#5e6770</item>
+        <item name="suggestionSelectionHighlight">@drawable/dark_candidate_selected_background</item>
+        <item name="suggestionTextSize">@dimen/candidate_font_height</item>
+        <item name="suggestionBackgroundImage">@drawable/hell3lazer_light_blue_main_background</item>
+        <item name="suggestionCloseImage">@drawable/close_suggestions_dark</item>
+    </style>
+
+    <style name="Hell3LazerLightBluePopup" parent="@style/YocheesBaseTheme">
+        <item name="android:background">@drawable/hell3lazer_light_blue_popup_background</item>
+        <item name="android:paddingLeft">0px</item>
+        <item name="android:paddingTop">0px</item>
+        <item name="android:paddingRight">0px</item>
+        <item name="android:paddingBottom">0px</item>
+        <item name="verticalCorrection">-0.26in</item>
+        <item name="keyPreviewTextSize">0px</item>
+        <item name="hintTextSize">0px</item>
+
+        <item name="keyBackground">@drawable/hell3lazer_light_blue_key</item>
+        <item name="keyTextColor">#1d232a</item>
+    </style>
+
+</resources>
+
+

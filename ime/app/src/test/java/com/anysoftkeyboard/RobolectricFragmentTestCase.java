@@ -54,12 +54,6 @@ public abstract class RobolectricFragmentTestCase<F extends Fragment>
     @IdRes private static int CREATED_FRAGMENT;
 
     @Override
-    protected void onCreate(Bundle icicle) {
-      setTheme(net.evendanan.pixel.R.style.Theme_AskApp_NoTitle_NoActionBar);
-      super.onCreate(icicle);
-    }
-
-    @Override
     protected void onPostCreate(Bundle savedInstanceState) {
       super.onPostCreate(savedInstanceState);
       final NavController navController =

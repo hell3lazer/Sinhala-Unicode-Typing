@@ -21,7 +21,6 @@ import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.inputmethodservice.InputMethodService;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.view.Gravity;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
@@ -39,15 +38,10 @@ import android.widget.Toast;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
-import androidx.core.util.Supplier;
 import com.anysoftkeyboard.base.utils.GCUtils;
 import com.anysoftkeyboard.base.utils.Logger;
-import com.anysoftkeyboard.keyboards.views.AnyKeyboardViewWithMiniKeyboard;
 import com.anysoftkeyboard.keyboards.views.KeyboardViewContainerView;
 import com.anysoftkeyboard.keyboards.views.OnKeyboardActionListener;
-import com.anysoftkeyboard.prefs.AnimationsLevel;
-import com.anysoftkeyboard.rx.GenericOnError;
 import com.anysoftkeyboard.ui.dev.DeveloperUtils;
 import com.anysoftkeyboard.utils.ModifierKeyState;
 import com.menny.android.anysoftkeyboard.AnyApplication;
@@ -55,20 +49,12 @@ import com.menny.android.anysoftkeyboard.BuildConfig;
 import com.menny.android.anysoftkeyboard.R;
 import io.reactivex.disposables.CompositeDisposable;
 import java.util.List;
-import net.evendanan.pixel.GeneralDialogController;
 
 public abstract class AnySoftKeyboardBase extends InputMethodService
-    implements OnKeyboardActionListener, GeneralDialogController.OnDialogStateChangedListener {
+    implements OnKeyboardActionListener {
   protected static final String TAG = "ASK";
 
   protected static final long ONE_FRAME_DELAY = 1000L / 60L;
-
-  private boolean mIsDialogShowing = false;
-  private Object mBackCallbackToken = null;
-  @Nullable private MainKeyboardBackAnimationHelper mDismissAnimationHelper = null;
-  private boolean mInputViewStarted = false;
-  private AnimationsLevel mAnimationsLevel = AnimationsLevel.Some;
-  private final CompositeDisposable mServiceDisposables = new CompositeDisposable();
 
   private static final ExtractedTextRequest EXTRACTED_TEXT_REQUEST = new ExtractedTextRequest();
 
@@ -117,12 +103,6 @@ public abstract class AnySoftKeyboardBase extends InputMethodService
     }
 
     mInputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-
-    mServiceDisposables.add(
-        AnimationsLevel.createPrefsObservable(this)
-            .subscribe(
-                animationsLevel -> mAnimationsLevel = animationsLevel,
-                GenericOnError.onError("AnimationsLevel")));
   }
 
   @Nullable
@@ -198,18 +178,7 @@ public abstract class AnySoftKeyboardBase extends InputMethodService
             });
 
     mInputView = mInputViewContainer.getStandardKeyboardView();
-    if (mInputView instanceof AnyKeyboardViewWithMiniKeyboard) {
-      ((AnyKeyboardViewWithMiniKeyboard) mInputView)
-          .setOnPopupShownListener(
-              showing -> {
-                updateBackCallbackState();
-                if (mInputViewContainer != null) {
-                  mInputViewContainer.setDimmed(showing);
-                }
-              });
-    }
     mInputViewContainer.setOnKeyboardActionListener(this);
-    mInputViewContainer.resetPredictiveBackProgress();
     setupInputViewWatermark();
 
     return mInputViewContainer;
@@ -338,159 +307,16 @@ public abstract class AnySoftKeyboardBase extends InputMethodService
     while (handleCloseRequest()) {
       Logger.i(TAG, "Still have stuff to close. Trying handleCloseRequest again.");
     }
-    if (mInputViewContainer != null) {
-      mInputViewContainer.resetPredictiveBackProgress();
-    }
     super.hideWindow();
   }
 
   @Override
-  public void onWindowHidden() {
-    super.onWindowHidden();
-    mInputViewStarted = false;
-    if (mInputViewContainer != null) {
-      mInputViewContainer.resetPredictiveBackProgress();
-    }
-    updateBackCallbackState();
-  }
-
-  @Override
   public void onDestroy() {
-    if (mDismissAnimationHelper != null) {
-      mDismissAnimationHelper.unregister();
-      mDismissAnimationHelper = null;
-    }
-    if (mBackCallbackToken != null) {
-      AnyApplication.getDeviceSpecific()
-          .unregisterBackGestureHandler(getWindow(), mBackCallbackToken);
-      mBackCallbackToken = null;
-    }
-    mServiceDisposables.dispose();
     mInputSessionDisposables.dispose();
     if (getInputView() != null) getInputView().onViewNotRequired();
     mInputView = null;
 
     super.onDestroy();
-  }
-
-  @Override
-  public void onDialogStateChanged(boolean isShowing) {
-    mIsDialogShowing = isShowing;
-    updateBackCallbackState();
-  }
-
-  protected boolean hasStuffToClose() {
-    return mIsDialogShowing || isPopupKeyboardShowing();
-  }
-
-  protected boolean isPopupKeyboardShowing() {
-    final var inputView = getInputView();
-    if (inputView instanceof AnyKeyboardViewWithMiniKeyboard) {
-      return ((AnyKeyboardViewWithMiniKeyboard) inputView).isPopupKeyboardShowing();
-    }
-    return false;
-  }
-
-  protected void updateBackCallbackState() {
-    final boolean hasStuffToClose = hasStuffToClose();
-    // mDismissAnimationHelper and mBackCallbackToken are strictly mutually exclusive:
-    // when popup/dialog is showing, mDismissAnimationHelper is unregistered before
-    // mBackCallbackToken
-    // is registered, avoiding priority clashes on the window's back dispatcher.
-    if (hasStuffToClose) {
-      if (mDismissAnimationHelper != null) {
-        mDismissAnimationHelper.unregister();
-        mDismissAnimationHelper = null;
-      }
-      if (mBackCallbackToken == null) {
-        mBackCallbackToken =
-            AnyApplication.getDeviceSpecific()
-                .registerBackGestureHandler(getWindow(), this::handleCloseRequest);
-      }
-    } else {
-      if (mBackCallbackToken != null) {
-        AnyApplication.getDeviceSpecific()
-            .unregisterBackGestureHandler(getWindow(), mBackCallbackToken);
-        mBackCallbackToken = null;
-      }
-      if (mInputViewStarted) {
-        if (mDismissAnimationHelper == null) {
-          mDismissAnimationHelper = createDismissAnimationHelper();
-          if (mDismissAnimationHelper != null) {
-            mDismissAnimationHelper.register();
-          }
-        }
-      } else {
-        if (mDismissAnimationHelper != null) {
-          mDismissAnimationHelper.unregister();
-          mDismissAnimationHelper = null;
-        }
-      }
-    }
-  }
-
-  protected boolean areAnimationsEnabled() {
-    if (mAnimationsLevel == AnimationsLevel.None) return false;
-    try {
-      float durationScale =
-          Settings.Global.getFloat(
-              getContentResolver(), Settings.Global.ANIMATOR_DURATION_SCALE, 1f);
-      float transitionScale =
-          Settings.Global.getFloat(
-              getContentResolver(), Settings.Global.TRANSITION_ANIMATION_SCALE, 1f);
-      return durationScale > 0f && transitionScale > 0f;
-    } catch (Exception e) {
-      return true;
-    }
-  }
-
-  @VisibleForTesting @Nullable
-  Supplier<MainKeyboardBackAnimationHelper> mDismissAnimationHelperFactory = null;
-
-  @VisibleForTesting
-  protected MainKeyboardBackAnimationHelper createDismissAnimationHelper() {
-    if (mDismissAnimationHelperFactory != null) {
-      return mDismissAnimationHelperFactory.get();
-    }
-    return MainKeyboardBackAnimationHelper.create(
-        () -> {
-          final var dialog = getWindow();
-          return dialog != null ? dialog.getWindow() : null;
-        },
-        this::getInputViewContainer,
-        this::hideWindow,
-        this::areAnimationsEnabled);
-  }
-
-  @VisibleForTesting
-  public void setDismissAnimationHelperFactory(
-      @Nullable Supplier<MainKeyboardBackAnimationHelper> factory) {
-    mDismissAnimationHelperFactory = factory;
-  }
-
-  @VisibleForTesting
-  @Nullable
-  public MainKeyboardBackAnimationHelper getDismissAnimationHelper() {
-    return mDismissAnimationHelper;
-  }
-
-  @Override
-  @CallSuper
-  public void onStartInputView(android.view.inputmethod.EditorInfo info, boolean restarting) {
-    super.onStartInputView(info, restarting);
-    mInputViewStarted = true;
-    updateBackCallbackState();
-  }
-
-  @Override
-  @CallSuper
-  public void onFinishInputView(boolean finishingInput) {
-    super.onFinishInputView(finishingInput);
-    mInputViewStarted = false;
-    if (mInputViewContainer != null) {
-      mInputViewContainer.resetPredictiveBackProgress();
-    }
-    updateBackCallbackState();
   }
 
   @Override

@@ -2,11 +2,14 @@
 <resources>
 
     <style name="SettingsTileLabel">
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:gravity">start|center_vertical</item>
         <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:layout_margin">4dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:textAppearance">@style/Ask.Text.Large.Bold</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="ProgressDialog" parent="@android:style/Theme.Dialog">

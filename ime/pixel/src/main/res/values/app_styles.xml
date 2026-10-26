@@ -2,6 +2,7 @@
 <resources>
 
     <style name="Theme.AskAppBase" parent="Theme.AppCompat.DayNight">
+        <item name="android:windowBackground">@color/app_window_background</item>
         <item name="android:textColorLink">@color/text_color_link</item>
         <item name="colorAccent">@color/app_accent</item>
         <!-- I'm going to use the keyboard's background, so no need for double drawing -->
@@ -45,8 +46,6 @@
 
     <style name="Theme.AskApp.NoTitle.NoActionBar" parent="Theme.AskApp.NoTitle">
         <item name="windowActionBar">false</item>
-        <item name="android:fitsSystemWindows">false</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="Theme.AskApp.Popup" parent="Base.Theme.AppCompat.Light.Dialog.FixedSize">
@@ -166,7 +165,7 @@
     </style>
 
     <style name="Ask.SettingsTileLayout">
-        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_weight">0</item>

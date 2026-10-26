@@ -19,13 +19,12 @@ public class SupportTest {
     SparseIntArray sparseIntArray = new SparseIntArray();
     int[] backwardCompatibleStyleable =
         Support.createBackwardCompatibleStyleable(
-            com.anysoftkeyboard.api.R.styleable.KeyboardLayout,
+            R.styleable.KeyboardLayout,
             getApplicationContext(),
             getApplicationContext(),
             sparseIntArray);
 
-    Assert.assertSame(
-        backwardCompatibleStyleable, com.anysoftkeyboard.api.R.styleable.KeyboardLayout);
+    Assert.assertSame(backwardCompatibleStyleable, R.styleable.KeyboardLayout);
     Assert.assertEquals(backwardCompatibleStyleable.length, sparseIntArray.size());
     for (int attrId : backwardCompatibleStyleable) {
       Assert.assertEquals(attrId, sparseIntArray.get(attrId));
@@ -65,26 +64,20 @@ public class SupportTest {
     SparseIntArray sparseIntArray = new SparseIntArray();
     int[] backwardCompatibleStyleable =
         Support.createBackwardCompatibleStyleable(
-            com.anysoftkeyboard.api.R.styleable.KeyboardLayout,
-            getApplicationContext(),
-            remoteContext,
-            sparseIntArray);
+            R.styleable.KeyboardLayout, getApplicationContext(), remoteContext, sparseIntArray);
 
     Mockito.verify(remoteRes).getIdentifier("showPreview", "attr", "com.some.other.package");
     Mockito.verify(remoteRes).getIdentifier("autoCap", "attr", "com.some.other.package");
     Mockito.verifyNoMoreInteractions(remoteRes);
 
-    Assert.assertNotSame(
-        backwardCompatibleStyleable, com.anysoftkeyboard.api.R.styleable.KeyboardLayout);
-    Assert.assertEquals(
-        backwardCompatibleStyleable.length,
-        com.anysoftkeyboard.api.R.styleable.KeyboardLayout.length);
+    Assert.assertNotSame(backwardCompatibleStyleable, R.styleable.KeyboardLayout);
+    Assert.assertEquals(backwardCompatibleStyleable.length, R.styleable.KeyboardLayout.length);
     Assert.assertEquals(backwardCompatibleStyleable.length, sparseIntArray.size());
     for (int attrId : backwardCompatibleStyleable) {
       if (attrId == 123) {
-        Assert.assertEquals(com.anysoftkeyboard.api.R.attr.showPreview, sparseIntArray.get(123));
+        Assert.assertEquals(R.attr.showPreview, sparseIntArray.get(123));
       } else if (attrId == 124) {
-        Assert.assertEquals(com.anysoftkeyboard.api.R.attr.autoCap, sparseIntArray.get(124));
+        Assert.assertEquals(R.attr.autoCap, sparseIntArray.get(124));
       } else {
         Assert.assertEquals(attrId, sparseIntArray.get(attrId));
       }
@@ -106,20 +99,14 @@ public class SupportTest {
     SparseIntArray sparseIntArray = new SparseIntArray();
     int[] backwardCompatibleStyleable =
         Support.createBackwardCompatibleStyleable(
-            com.anysoftkeyboard.api.R.styleable.KeyboardLayout,
-            getApplicationContext(),
-            remoteContext,
-            sparseIntArray);
+            R.styleable.KeyboardLayout, getApplicationContext(), remoteContext, sparseIntArray);
 
     Mockito.verify(remoteRes).getIdentifier("showPreview", "attr", "com.some.other.package");
     Mockito.verify(remoteRes).getIdentifier("autoCap", "attr", "com.some.other.package");
     Mockito.verifyNoMoreInteractions(remoteRes);
 
-    Assert.assertNotSame(
-        backwardCompatibleStyleable, com.anysoftkeyboard.api.R.styleable.KeyboardLayout);
-    Assert.assertEquals(
-        backwardCompatibleStyleable.length,
-        com.anysoftkeyboard.api.R.styleable.KeyboardLayout.length - 2);
+    Assert.assertNotSame(backwardCompatibleStyleable, R.styleable.KeyboardLayout);
+    Assert.assertEquals(backwardCompatibleStyleable.length, R.styleable.KeyboardLayout.length - 2);
     Assert.assertEquals(backwardCompatibleStyleable.length, sparseIntArray.size());
     for (int attrId : backwardCompatibleStyleable) {
       Assert.assertEquals(attrId, sparseIntArray.get(attrId));

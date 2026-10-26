@@ -1,3 +1,0 @@
-AnySoftKeyboard keyboards pack: Scottish Gaelic (Gàidhlig) keyboard and dictionary.
-
-This is an expansion pack for AnySoftKeyboard. Install AnySoftKeyboard first, and then select the Scottish Gaelic layout from AnySoftKeyboard's Settings -> Keyboards menu.

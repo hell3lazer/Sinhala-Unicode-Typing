@@ -528,9 +528,6 @@ public abstract class AnySoftKeyboard extends AnySoftKeyboardColorizeNavBar {
       case KeyCodes.MODE_SYMBOLS:
         nextKeyboard(getCurrentInputEditorInfo(), NextKeyboardType.Symbols);
         break;
-      case KeyCodes.HOMOPHONE_SEARCH:
-        toggleHomophoneSearch();
-        break;
       case KeyCodes.MODE_ALPHABET:
         if (getKeyboardSwitcher().shouldPopupForLanguageSwitch()) {
           showLanguageSelectionDialog();
@@ -660,10 +657,6 @@ public abstract class AnySoftKeyboard extends AnySoftKeyboardColorizeNavBar {
             && mSpecialWrapCharacters.get(primaryCode) != null) {
           int[] wrapCharacters = mSpecialWrapCharacters.get(primaryCode);
           wrapSelectionWithCharacters(wrapCharacters[0], wrapCharacters[1]);
-        } else if (isRadicalInputMode() && isCurrentRadicalKeyCode(primaryCode)) {
-          // In radical mode, certain punctuation chars are part of radical sequences
-          // (e.g., Boshiamy uses "na," -> な, "na." -> ナ, ".1" -> ㄅ)
-          handleCharacter(primaryCode, key, multiTapIndex, nearByKeyCodes);
         } else if (isWordSeparator(primaryCode)) {
           handleSeparator(primaryCode);
         } else if (mControlKeyState.isActive()) {
@@ -699,6 +692,27 @@ public abstract class AnySoftKeyboard extends AnySoftKeyboardColorizeNavBar {
       int primaryCode, Keyboard.Key key, int multiTapIndex, int[] nearByKeyCodes, boolean fromUI) {
     final InputConnection ic = getCurrentInputConnection();
     if (ic != null) ic.beginBatchEdit();
+
+    if (primaryCode == 'ැ' || primaryCode == 'ා' || primaryCode == 'ෑ' || primaryCode == '්' || primaryCode == 'ෙ' || primaryCode == 'ෘ') {
+        CharSequence seq = ic != null ? ic.getTextBeforeCursor(1, 0) : null;
+        if (seq != null && seq.length() > 0) {
+            char lastChar = seq.charAt(0);
+            int replacement = 0;
+            if (lastChar == 'අ' && primaryCode == 'ැ') replacement = 'ඇ';
+            else if (lastChar == 'අ' && primaryCode == 'ා') replacement = 'ආ';
+            else if (lastChar == 'අ' && primaryCode == 'ෑ') replacement = 'ඈ';
+            else if (lastChar == 'එ' && primaryCode == '්') replacement = 'ඒ';
+            else if (lastChar == 'එ' && primaryCode == 'ෙ') replacement = 'ඓ';
+            else if (lastChar == 'ඍ' && primaryCode == 'ෘ') replacement = 'ඎ';
+            else if (lastChar == 'ඔ' && primaryCode == '්') replacement = 'ඕ';
+
+            if (replacement != 0) {
+                handleDeleteLastCharacter(false);
+                primaryCode = replacement;
+            }
+        }
+    }
+
     super.onKey(primaryCode, key, multiTapIndex, nearByKeyCodes, fromUI);
     if (primaryCode > 0) {
       onNonFunctionKey(primaryCode, key, multiTapIndex, nearByKeyCodes);
@@ -706,15 +720,6 @@ public abstract class AnySoftKeyboard extends AnySoftKeyboardColorizeNavBar {
       onFunctionKey(primaryCode, key, fromUI);
     }
     if (ic != null) ic.endBatchEdit();
-  }
-
-  /**
-   * Checks if the given key code is a valid radical sequence character for the current keyboard.
-   * Delegates to the keyboard's own definition of valid radical characters.
-   */
-  private boolean isCurrentRadicalKeyCode(int primaryCode) {
-    final var keyboard = getCurrentAlphabetKeyboard();
-    return keyboard != null && keyboard.isRadicalKeyCode(primaryCode);
   }
 
   private boolean isTerminalEmulation() {
@@ -940,7 +945,7 @@ public abstract class AnySoftKeyboard extends AnySoftKeyboardColorizeNavBar {
     InputConnection ic = getCurrentInputConnection();
     final WordComposer currentComposedWord = getCurrentComposedWord();
     final boolean wordManipulation =
-        (isPredictionOn() || isRadicalInputMode())
+        isPredictionOn()
             && currentComposedWord.cursorPosition() > 0
             && !currentComposedWord.isEmpty();
     if (isSelectionUpdateDelayed() || ic == null) {
@@ -1007,7 +1012,7 @@ public abstract class AnySoftKeyboard extends AnySoftKeyboardColorizeNavBar {
   private void handleForwardDelete(InputConnection ic) {
     final WordComposer currentComposedWord = getCurrentComposedWord();
     final boolean wordManipulation =
-        (isPredictionOn() || isRadicalInputMode())
+        isPredictionOn()
             && currentComposedWord.cursorPosition() < currentComposedWord.charCount()
             && !currentComposedWord.isEmpty();
 
@@ -1216,15 +1221,8 @@ public abstract class AnySoftKeyboard extends AnySoftKeyboardColorizeNavBar {
     super.onRelease(primaryCode);
     InputConnection ic = getCurrentInputConnection();
     if (primaryCode == KeyCodes.SHIFT) {
-      // Re-evaluate auto-capitalization if Shift was held as a momentary modifier (e.g.,
-      // Shift+Delete, Shift+Enter)
-      final boolean isMomentary = mShiftKeyState.isMomentary();
       mShiftKeyState.onRelease(mMultiTapTimeout, mLongPressTimeout);
-      if (isMomentary) {
-        updateShiftStateNow();
-      } else {
-        handleShift();
-      }
+      handleShift();
     } else {
       if (mShiftKeyState.onOtherKeyReleased()) {
         updateShiftStateNow();
@@ -1290,7 +1288,7 @@ public abstract class AnySoftKeyboard extends AnySoftKeyboardColorizeNavBar {
 
           @Override
           public void onSetupDialogRequired(
-              AlertDialog.Builder builder, int optionId, @Nullable Object data) {
+              Context context, AlertDialog.Builder builder, int optionId, @Nullable Object data) {
             builder.setItems(
                 null, null); // clearing previously set items, since we want checked item
             builder.setMultiChoiceItems(items, checked, (dialogInterface, i, b) -> checked[i] = b);

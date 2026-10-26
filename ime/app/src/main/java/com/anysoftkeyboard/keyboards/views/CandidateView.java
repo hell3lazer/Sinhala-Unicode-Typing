@@ -87,8 +87,6 @@ public class CandidateView extends View implements ThemeableChild {
   private int mTotalWidth;
 
   private boolean mAlwaysUseDrawText;
-  private boolean mIsDimmed;
-  private float mBackgroundDimAmount = AnyKeyboardViewBase.DEFAULT_BACKGROUND_DIM_AMOUNT;
   @NonNull private Disposable mDisposable = Disposables.empty();
 
   public CandidateView(Context context, AttributeSet attrs) {
@@ -124,7 +122,13 @@ public class CandidateView extends View implements ThemeableChild {
 
   @VisibleForTesting
   static OverlayData getNormalizedOverlayData(OverlayData overlay) {
-    return OverlayDataNormalizer.normalizeSecondary(overlay);
+    if (overlay.getPrimaryDarkColor() != Color.TRANSPARENT
+        || overlay.getSecondaryTextColor() != Color.TRANSPARENT) {
+      return OverlayDataNormalizer.normalize(
+          overlay, 96, overlay.getPrimaryDarkColor(), overlay.getSecondaryTextColor());
+    } else {
+      return overlay;
+    }
   }
 
   @Override
@@ -132,8 +136,7 @@ public class CandidateView extends View implements ThemeableChild {
     final Context context = getContext();
     final AddOn.AddOnResourceMapping remoteAttrs = theme.getResourceMapping();
     final int[] remoteStyleableArray =
-        remoteAttrs.getRemoteStyleableArrayFromLocal(
-            com.anysoftkeyboard.api.R.styleable.AnyKeyboardViewTheme);
+        remoteAttrs.getRemoteStyleableArrayFromLocal(R.styleable.AnyKeyboardViewTheme);
     TypedArray a =
         theme
             .getPackageContext()
@@ -159,42 +162,49 @@ public class CandidateView extends View implements ThemeableChild {
     for (int attrIndex = 0; attrIndex < resolvedAttrsCount; attrIndex++) {
       final int remoteIndex = a.getIndex(attrIndex);
       try {
-        final int localAttrId = remoteAttrs.getLocalAttrId(remoteStyleableArray[remoteIndex]);
-        if (localAttrId == com.anysoftkeyboard.api.R.attr.suggestionNormalTextColor) {
-          mThemeOverlayCombiner.setThemeNameTextColor(
-              a.getColor(remoteIndex, ContextCompat.getColor(context, R.color.candidate_normal)));
-        } else if (localAttrId == com.anysoftkeyboard.api.R.attr.suggestionRecommendedTextColor) {
-          mThemeOverlayCombiner.setThemeTextColor(
-              new ColorStateList(
-                  new int[][] {{0}},
-                  new int[] {
-                    a.getColor(
-                        remoteIndex, ContextCompat.getColor(context, R.color.candidate_recommended))
-                  }));
-        } else if (localAttrId == com.anysoftkeyboard.api.R.attr.suggestionOthersTextColor) {
-          mThemeOverlayCombiner.setThemeHintTextColor(
-              a.getColor(remoteIndex, ContextCompat.getColor(context, R.color.candidate_other)));
-        } else if (localAttrId == com.anysoftkeyboard.api.R.attr.suggestionDividerImage) {
-          mDivider = a.getDrawable(remoteIndex);
-        } else if (localAttrId == com.anysoftkeyboard.api.R.attr.suggestionCloseImage) {
-          mCloseDrawable = a.getDrawable(remoteIndex);
-        } else if (localAttrId == com.anysoftkeyboard.api.R.attr.suggestionTextSize) {
-          fontSizePixel = a.getDimension(remoteIndex, fontSizePixel);
-        } else if (localAttrId == com.anysoftkeyboard.api.R.attr.suggestionWordXGap) {
-          mHorizontalGap = a.getDimension(remoteIndex, mHorizontalGap);
-        } else if (localAttrId == com.anysoftkeyboard.api.R.attr.suggestionBackgroundImage) {
-          final Drawable stripImage = a.getDrawable(remoteIndex);
-          if (stripImage != null) {
-            setBackgroundColor(Color.TRANSPARENT);
-            mThemeOverlayCombiner.setThemeKeyboardBackground(stripImage);
-            setBackgroundDrawable(
-                mThemeOverlayCombiner.getThemeResources().getKeyboardBackground());
-          }
-        } else if (localAttrId == com.anysoftkeyboard.api.R.attr.suggestionSelectionHighlight) {
-          mSelectionHighlight = a.getDrawable(remoteIndex);
-        } else if (localAttrId == com.anysoftkeyboard.api.R.attr.backgroundDimAmount) {
-          mBackgroundDimAmount =
-              a.getFloat(remoteIndex, AnyKeyboardViewBase.DEFAULT_BACKGROUND_DIM_AMOUNT);
+        switch (remoteAttrs.getLocalAttrId(remoteStyleableArray[remoteIndex])) {
+          case R.attr.suggestionNormalTextColor:
+            mThemeOverlayCombiner.setThemeNameTextColor(
+                a.getColor(remoteIndex, ContextCompat.getColor(context, R.color.candidate_normal)));
+            break;
+          case R.attr.suggestionRecommendedTextColor:
+            mThemeOverlayCombiner.setThemeTextColor(
+                new ColorStateList(
+                    new int[][] {{0}},
+                    new int[] {
+                      a.getColor(
+                          remoteIndex,
+                          ContextCompat.getColor(context, R.color.candidate_recommended))
+                    }));
+            break;
+          case R.attr.suggestionOthersTextColor:
+            mThemeOverlayCombiner.setThemeHintTextColor(
+                a.getColor(remoteIndex, ContextCompat.getColor(context, R.color.candidate_other)));
+            break;
+          case R.attr.suggestionDividerImage:
+            mDivider = a.getDrawable(remoteIndex);
+            break;
+          case R.attr.suggestionCloseImage:
+            mCloseDrawable = a.getDrawable(remoteIndex);
+            break;
+          case R.attr.suggestionTextSize:
+            fontSizePixel = a.getDimension(remoteIndex, fontSizePixel);
+            break;
+          case R.attr.suggestionWordXGap:
+            mHorizontalGap = a.getDimension(remoteIndex, mHorizontalGap);
+            break;
+          case R.attr.suggestionBackgroundImage:
+            final Drawable stripImage = a.getDrawable(remoteIndex);
+            if (stripImage != null) {
+              setBackgroundColor(Color.TRANSPARENT);
+              mThemeOverlayCombiner.setThemeKeyboardBackground(stripImage);
+              setBackgroundDrawable(
+                  mThemeOverlayCombiner.getThemeResources().getKeyboardBackground());
+            }
+            break;
+          case R.attr.suggestionSelectionHighlight:
+            mSelectionHighlight = a.getDrawable(remoteIndex);
+            break;
         }
       } catch (Exception e) {
         Logger.w(TAG, "Got an exception while reading theme data", e);
@@ -363,18 +373,6 @@ public class CandidateView extends View implements ThemeableChild {
     mTotalWidth = x;
     if (mTargetScrollX != scrollX) {
       scrollToTarget();
-    }
-
-    if (mIsDimmed) {
-      paint.setColor((int) (mBackgroundDimAmount * 0xFF) << 24);
-      canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
-    }
-  }
-
-  public void setDimmed(boolean dimmed) {
-    if (mIsDimmed != dimmed) {
-      mIsDimmed = dimmed;
-      invalidate();
     }
   }
 

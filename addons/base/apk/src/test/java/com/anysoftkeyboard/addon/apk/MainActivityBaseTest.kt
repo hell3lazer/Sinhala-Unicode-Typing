@@ -2,19 +2,17 @@ package com.anysoftkeyboard.addon.apk
 
 import android.content.ComponentName
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
-import androidx.compose.ui.test.junit4.createEmptyComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
+import android.view.inputmethod.InputMethodInfo
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import com.anysoftkeyboard.AnySoftKeyboardRobolectricTestRunner
 import com.anysoftkeyboard.addon.base.apk.R
 import org.junit.Assert
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RuntimeEnvironment
@@ -22,25 +20,43 @@ import org.robolectric.Shadows
 
 @RunWith(AnySoftKeyboardRobolectricTestRunner::class)
 class MainActivityBaseTest {
-  @get:Rule val composeRule = createEmptyComposeRule()
-
   @Test
   fun testActivityShowsAddOnDetails() {
     ActivityScenario.launch(TestMainActivity::class.java).use { scenario ->
-      scenario.moveToState(Lifecycle.State.RESUMED)
-      composeRule.onNodeWithText("Thank you for installing Test Add On App Name.").assertExists()
-      composeRule.onNodeWithContentDescription("A screenshot of the addon").assertExists()
-      composeRule
-          .onNodeWithText("This is a test add on description, it can be anything")
-          .assertExists()
-      composeRule.onNodeWithText("Visit us at https://example.com").assertExists()
-      composeRule
-          .onNodeWithText(
+      scenario.moveToState(Lifecycle.State.RESUMED).onActivity { activity ->
+        activity.findViewById<TextView>(R.id.welcome_description).let {
+          Assert.assertEquals(
+              "Thank you for installing Test Add On App Name.",
+              it.text,
+          )
+        }
+        activity.findViewById<ImageView>(R.id.app_screenshot).let {
+          Assert.assertEquals(
+              R.drawable.test_screenshot,
+              Shadows.shadowOf(it.drawable).createdFromResId,
+          )
+        }
+        activity.findViewById<TextView>(R.id.pack_description).let {
+          Assert.assertEquals(
+              "This is a test add on description, it can be anything",
+              it.text,
+          )
+        }
+        activity.findViewById<TextView>(R.id.add_on_web_site).let {
+          Assert.assertEquals(
+              "Visit us at https://example.com",
+              it.text.toString(),
+          )
+        }
+        activity.findViewById<TextView>(R.id.release_notes).let {
+          Assert.assertEquals(
               """Release notes for vnull (0):
 * this
 * and that""",
+              it.text,
           )
-          .assertExists()
+        }
+      }
     }
   }
 
@@ -50,24 +66,34 @@ class MainActivityBaseTest {
         .deletePackage(ASK_PACKAGE_NAME)
 
     ActivityScenario.launch(TestMainActivity::class.java).use { scenario ->
-      scenario.moveToState(Lifecycle.State.RESUMED)
-      composeRule
-          .onNodeWithText(
+      scenario.moveToState(Lifecycle.State.RESUMED).onActivity { activity ->
+        activity.findViewById<TextView>(R.id.action_description).run {
+          Assert.assertEquals(
               "AnySoftKeyboard is not installed on your device.\n" +
                   "In order to use this expansion pack, " +
                   "you must first install AnySoftKeyboard.",
+              text,
           )
-          .assertExists()
-
-      composeRule.onNodeWithText("Go to Play Store").performScrollTo().performClick()
-
-      val app = Shadows.shadowOf(RuntimeEnvironment.getApplication())
-      val searchIntent = app.nextStartedActivity
-      Assert.assertNotNull(searchIntent)
-      Assert.assertEquals(Intent.ACTION_VIEW, searchIntent.action)
-      Assert.assertEquals("market", searchIntent.data?.scheme)
-      Assert.assertEquals("search", searchIntent.data?.authority)
-      Assert.assertEquals("q=com.menny.android.anysoftkeyboard", searchIntent.data?.query)
+        }
+        activity.findViewById<Button>(R.id.action_button).run {
+          Assert.assertEquals(
+              "Go to Play Store",
+              text,
+          )
+          Shadows.shadowOf(this).onClickListener.onClick(this)
+          Shadows.shadowOf(RuntimeEnvironment.getApplication()).let { app ->
+            app.nextStartedActivity.let { searchIntent ->
+              Assert.assertEquals(Intent.ACTION_VIEW, searchIntent.action)
+              Assert.assertEquals("market", searchIntent.data!!.scheme)
+              Assert.assertEquals("search", searchIntent.data!!.authority)
+              Assert.assertEquals(
+                  "q=com.menny.android.anysoftkeyboard",
+                  searchIntent.data!!.query,
+              )
+            }
+          }
+        }
+      }
     }
   }
 
@@ -78,11 +104,27 @@ class MainActivityBaseTest {
         info.packageName = ASK_PACKAGE_NAME
         pm.installPackage(info)
       }
+      val imeComponent =
+          ComponentName(
+              ASK_PACKAGE_NAME,
+              "${ASK_PACKAGE_NAME}.SoftKeyboard",
+          )
+      pm.addServiceIfNotPresent(imeComponent)
+
+      // Register the IME with InputMethodManager
+      val imeInfo = InputMethodInfo(ASK_PACKAGE_NAME, imeComponent.className, "AnySoftKeyboard", "")
+      Shadows.shadowOf(
+              RuntimeEnvironment.getApplication()
+                  .getSystemService(android.content.Context.INPUT_METHOD_SERVICE)
+                  as android.view.inputmethod.InputMethodManager,
+          )
+          .setInputMethodInfoList(listOf(imeInfo))
+
       ComponentName(ASK_PACKAGE_NAME, "${ASK_PACKAGE_NAME}.MainActivity").let { info ->
         pm.addActivityIfNotPresent(info)
         pm.addIntentFilterForActivity(
             info,
-            android.content.IntentFilter().apply {
+            IntentFilter().apply {
               addAction(Intent.ACTION_MAIN)
               addCategory(Intent.CATEGORY_LAUNCHER)
             },
@@ -91,95 +133,26 @@ class MainActivityBaseTest {
     }
 
     ActivityScenario.launch(TestMainActivity::class.java).use { scenario ->
-      scenario.moveToState(Lifecycle.State.RESUMED)
-      composeRule
-          .onNodeWithText(
+      scenario.moveToState(Lifecycle.State.RESUMED).onActivity { activity ->
+        activity.findViewById<TextView>(R.id.action_description).run {
+          Assert.assertEquals(
               "AnySoftKeyboard is installed. You may need to set it up to start using this expansion pack.",
+              text,
           )
-          .assertExists()
-
-      composeRule.onNodeWithText("Open AnySoftKeyboard").performScrollTo().performClick()
-
-      val app = Shadows.shadowOf(RuntimeEnvironment.getApplication())
-      val launcherIntent = app.nextStartedActivity
-      Assert.assertNotNull(launcherIntent)
-      Assert.assertEquals(ASK_PACKAGE_NAME, launcherIntent.`package`)
-    }
-  }
-
-  @Test
-  fun testIsAnySoftKeyboardInstalledReturnsFalseWhenNotInstalled() {
-    Shadows.shadowOf(RuntimeEnvironment.getApplication().packageManager)
-        .deletePackage(ASK_PACKAGE_NAME)
-
-    ActivityScenario.launch(TestMainActivity::class.java).use { scenario ->
-      scenario.moveToState(Lifecycle.State.RESUMED).onActivity { activity ->
-        Assert.assertFalse(activity.isAnySoftKeyboardInstalled())
-      }
-      composeRule
-          .onNodeWithText(
-              "AnySoftKeyboard is not installed on your device.\n" +
-                  "In order to use this expansion pack, " +
-                  "you must first install AnySoftKeyboard.",
+        }
+        activity.findViewById<Button>(R.id.action_button).run {
+          Assert.assertEquals(
+              "Open AnySoftKeyboard",
+              text,
           )
-          .assertExists()
-    }
-  }
-
-  @Test
-  fun testIsAnySoftKeyboardInstalledReturnsTrueWhenInstalledButNotEnabled() {
-    Shadows.shadowOf(RuntimeEnvironment.getApplication().packageManager).let { pm ->
-      PackageInfo().let { info ->
-        info.packageName = ASK_PACKAGE_NAME
-        pm.installPackage(info)
+          Shadows.shadowOf(this).onClickListener.onClick(this)
+          Shadows.shadowOf(RuntimeEnvironment.getApplication()).let { app ->
+            app.nextStartedActivity.let { launcherIntent ->
+              Assert.assertEquals(ASK_PACKAGE_NAME, launcherIntent.`package`)
+            }
+          }
+        }
       }
-    }
-
-    ActivityScenario.launch(TestMainActivity::class.java).use { scenario ->
-      scenario.moveToState(Lifecycle.State.RESUMED).onActivity { activity ->
-        Assert.assertTrue(activity.isAnySoftKeyboardInstalled())
-      }
-      composeRule
-          .onNodeWithText(
-              "AnySoftKeyboard is installed. You may need to set it up to start using this expansion pack.",
-          )
-          .assertExists()
-    }
-  }
-
-  @Test
-  fun testHideLauncherIconFlow() {
-    ActivityScenario.launch(TestMainActivity::class.java).use { scenario ->
-      scenario.moveToState(Lifecycle.State.RESUMED).onActivity { activity ->
-        val launcherComponent =
-            ComponentName(activity.packageName, "${activity.packageName}.LauncherAlias")
-        Assert.assertNotEquals(
-            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-            activity.packageManager.getComponentEnabledSetting(launcherComponent),
-        )
-
-        composeRule.onNodeWithText("Hide icon from launcher").performScrollTo().performClick()
-
-        Assert.assertEquals(
-            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-            activity.packageManager.getComponentEnabledSetting(launcherComponent),
-        )
-        Assert.assertTrue(activity.isFinishing)
-      }
-    }
-  }
-
-  @Test
-  fun testClickWebsiteOpensBrowser() {
-    ActivityScenario.launch(TestMainActivity::class.java).use { scenario ->
-      scenario.moveToState(Lifecycle.State.RESUMED)
-      composeRule.onNodeWithText("Visit us at https://example.com").performScrollTo().performClick()
-
-      val app = Shadows.shadowOf(RuntimeEnvironment.getApplication())
-      val browserIntent = app.nextStartedActivity
-      Assert.assertNotNull(browserIntent)
-      Assert.assertEquals(Intent.ACTION_VIEW, browserIntent.action)
-      Assert.assertEquals("https://example.com", browserIntent.dataString)
     }
   }
 }

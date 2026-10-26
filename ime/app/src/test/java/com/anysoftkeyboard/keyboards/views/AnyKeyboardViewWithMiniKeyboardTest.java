@@ -269,8 +269,7 @@ public class AnyKeyboardViewWithMiniKeyboardTest extends AnyKeyboardViewBaseTest
 
     Assert.assertEquals(0, key.getPrimaryCode());
     Assert.assertEquals(0, key.getCodesCount());
-    Assert.assertEquals(
-        com.anysoftkeyboard.language.english.pack.R.xml.popup_16keys_wxyz, key.popupResId);
+    Assert.assertEquals(R.xml.popup_16keys_wxyz, key.popupResId);
     Assert.assertEquals("a", key.label);
     Assert.assertNull(key.popupCharacters);
 
@@ -352,8 +351,7 @@ public class AnyKeyboardViewWithMiniKeyboardTest extends AnyKeyboardViewBaseTest
 
     Assert.assertEquals(0, key.getPrimaryCode());
     Assert.assertEquals(0, key.getCodesCount());
-    Assert.assertEquals(
-        com.anysoftkeyboard.language.english.pack.R.xml.popup_16keys_wxyz, key.popupResId);
+    Assert.assertEquals(R.xml.popup_16keys_wxyz, key.popupResId);
     Assert.assertEquals("popup", key.label);
     Assert.assertNull(key.popupCharacters);
 
@@ -396,8 +394,7 @@ public class AnyKeyboardViewWithMiniKeyboardTest extends AnyKeyboardViewBaseTest
 
     Assert.assertEquals(0, key.getPrimaryCode());
     Assert.assertEquals(0, key.getCodesCount());
-    Assert.assertEquals(
-        com.anysoftkeyboard.language.english.pack.R.xml.popup_16keys_wxyz, key.popupResId);
+    Assert.assertEquals(R.xml.popup_16keys_wxyz, key.popupResId);
     Assert.assertEquals("popup", key.label);
     Assert.assertNull(key.popupCharacters);
 
@@ -523,7 +520,7 @@ public class AnyKeyboardViewWithMiniKeyboardTest extends AnyKeyboardViewBaseTest
     final Keyboard.Key key = findKey('w');
     key.popupCharacters = null;
     key.externalResourcePopupLayout = true;
-    key.popupResId = com.anysoftkeyboard.language.english.pack.R.xml.popup_16keys_abc;
+    key.popupResId = R.xml.popup_16keys_abc;
     mViewUnderTest.onLongPress(
         mEnglishKeyboard.getKeyboardAddOn(), key, false, mMockPointerTracker);
 
@@ -538,7 +535,7 @@ public class AnyKeyboardViewWithMiniKeyboardTest extends AnyKeyboardViewBaseTest
     final Keyboard.Key key = findKey('w');
     key.popupCharacters = null;
     key.externalResourcePopupLayout = false;
-    key.popupResId = com.anysoftkeyboard.language.english.pack.R.xml.popup_16keys_abc;
+    key.popupResId = R.xml.popup_16keys_abc;
     mViewUnderTest.onLongPress(
         mEnglishKeyboard.getKeyboardAddOn(), key, false, mMockPointerTracker);
 
@@ -701,8 +698,7 @@ public class AnyKeyboardViewWithMiniKeyboardTest extends AnyKeyboardViewBaseTest
     Assert.assertNull(mViewUnderTest.getMiniKeyboard());
     Assert.assertFalse(mViewUnderTest.mMiniKeyboardPopup.isShowing());
     final Keyboard.Key key = findKey('e');
-    Assert.assertEquals(
-        com.anysoftkeyboard.language.english.pack.R.xml.popup_qwerty_e, key.popupResId);
+    Assert.assertEquals(R.xml.popup_qwerty_e, key.popupResId);
 
     mViewUnderTest.onLongPress(mEnglishKeyboard.getKeyboardAddOn(), key, true, mMockPointerTracker);
 
@@ -728,17 +724,15 @@ public class AnyKeyboardViewWithMiniKeyboardTest extends AnyKeyboardViewBaseTest
   @Test
   public void testLongPressKeyPressStateWithLayout() {
     final Keyboard.Key key = findKey('e');
-    Assert.assertEquals(
-        com.anysoftkeyboard.language.english.pack.R.xml.popup_qwerty_e,
-        key.popupResId /*sanity check*/);
+    Assert.assertEquals(R.xml.popup_qwerty_e, key.popupResId /*sanity check*/);
 
     KeyDrawableStateProvider provider =
         new KeyDrawableStateProvider(
-            com.anysoftkeyboard.api.R.attr.key_type_function,
-            com.anysoftkeyboard.api.R.attr.key_type_action,
-            com.anysoftkeyboard.api.R.attr.action_done,
-            com.anysoftkeyboard.api.R.attr.action_search,
-            com.anysoftkeyboard.api.R.attr.action_go);
+            R.attr.key_type_function,
+            R.attr.key_type_action,
+            R.attr.action_done,
+            R.attr.action_search,
+            R.attr.action_go);
     Assert.assertArrayEquals(provider.KEY_STATE_NORMAL, key.getCurrentDrawableState(provider));
 
     Point keyPoint = ViewTestUtils.getKeyCenterPoint(key);
@@ -765,11 +759,11 @@ public class AnyKeyboardViewWithMiniKeyboardTest extends AnyKeyboardViewBaseTest
 
     KeyDrawableStateProvider provider =
         new KeyDrawableStateProvider(
-            com.anysoftkeyboard.api.R.attr.key_type_function,
-            com.anysoftkeyboard.api.R.attr.key_type_action,
-            com.anysoftkeyboard.api.R.attr.action_done,
-            com.anysoftkeyboard.api.R.attr.action_search,
-            com.anysoftkeyboard.api.R.attr.action_go);
+            R.attr.key_type_function,
+            R.attr.key_type_action,
+            R.attr.action_done,
+            R.attr.action_search,
+            R.attr.action_go);
     Assert.assertArrayEquals(provider.KEY_STATE_NORMAL, key.getCurrentDrawableState(provider));
 
     Point keyPoint = ViewTestUtils.getKeyCenterPoint(key);

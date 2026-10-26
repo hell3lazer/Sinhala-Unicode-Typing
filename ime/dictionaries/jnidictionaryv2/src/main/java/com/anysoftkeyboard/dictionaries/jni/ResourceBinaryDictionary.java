@@ -64,7 +64,7 @@ public class ResourceBinaryDictionary extends Dictionary {
   @SuppressWarnings("FieldCanBeLocal")
   private ByteBuffer mNativeDictDirectBuffer;
 
-  protected final AtomicLong mNativeDictPointer = new AtomicLong(0L);
+  private final AtomicLong mNativeDictPointer = new AtomicLong(0L);
 
   /**
    * Create a dictionary from a raw resource file
@@ -77,13 +77,9 @@ public class ResourceBinaryDictionary extends Dictionary {
       @NonNull Context originPackageContext,
       @XmlRes int resId) {
     super(dictionaryName);
-    loadNativeLibrary(originPackageContext);
+    CompatUtils.loadNativeLibrary(originPackageContext, "anysoftkey2_jni", "1.0.3");
     mOriginPackageContext = originPackageContext;
     mDictResId = resId;
-  }
-
-  protected void loadNativeLibrary(@NonNull Context originPackageContext) {
-    CompatUtils.loadNativeLibrary(originPackageContext, "anysoftkey2_jni", "1.0.4");
   }
 
   private native long openNative(ByteBuffer bb, int typedLetterMultiplier, int fullWordMultiplier);
@@ -105,7 +101,7 @@ public class ResourceBinaryDictionary extends Dictionary {
       @Nullable int[] nextLettersFrequencies,
       int nextLettersSize);
 
-  protected native boolean getWordsNative(long dictPointer, GetWordsCallback callback);
+  private native void getWordsNative(long dictPointer, GetWordsCallback callback);
 
   @Override
   protected void loadAllResources() {
@@ -295,9 +291,6 @@ public class ResourceBinaryDictionary extends Dictionary {
 
   @Override
   public void getLoadedWords(@NonNull GetWordsCallback callback) {
-    final long ptr = mNativeDictPointer.get();
-    if (isClosed() || isLoading() || ptr == 0L || !getWordsNative(ptr, callback)) {
-      callback.onGetWordsFinished(new char[0][0], new int[0]);
-    }
+    getWordsNative(mNativeDictPointer.get(), callback);
   }
 }

@@ -13,7 +13,6 @@ import com.anysoftkeyboard.overlay.OverlyDataCreator;
 import com.anysoftkeyboard.test.SharedPrefsHelper;
 import com.anysoftkeyboard.ui.settings.MainSettingsActivity;
 import com.menny.android.anysoftkeyboard.R;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,11 +20,6 @@ import org.mockito.Mockito;
 
 @RunWith(AnySoftKeyboardRobolectricTestRunner.class)
 public class AnySoftKeyboardPowerSavingTest extends AnySoftKeyboardBaseTest {
-
-  @After
-  public void tearDownPowerSaving() {
-    PowerSavingTest.sendBatteryState(true);
-  }
 
   @Test
   public void testDoesNotAskForSuggestionsIfInLowBattery() {

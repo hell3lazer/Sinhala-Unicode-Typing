@@ -495,7 +495,26 @@
     <string name="change_symbols_regular">123</string>
     <string name="select_keyboard_popup_title">კლავიატურის არჩევა</string>
     <!-- dictionaries -->
+    <string name="simley_key_name">ტექსტური</string>
+    <string name="short_smiley_key_name">მოკლე ტექსტური</string>
+    <string name="quick_text_kaomoji">კაომოჯი</string>
     <string name="history_quick_text_key_name">ისტორია</string>
+    <string name="default_quick_text_key_name">უბრალო სიცილაკები</string>
+    <string name="unicode_quick_text_key_name">სიცილაკები</string>
+    <string name="unicode_people_quick_text_key_name">ხალხი</string>
+    <string name="unicode_gestures_quick_text_key_name">ჟესტები</string>
+    <string name="unicode_accessories_quick_text_key_name">ნივთები</string>
+    <string name="unicode_animals_quick_text_key_name">ცხოველები</string>
+    <string name="unicode_food_quick_text_key_name">საკვები</string>
+    <string name="unicode_nature_quick_text_key_name">ბუნება</string>
+    <string name="unicode_transport_quick_text_key_name">ტრანსპორტი</string>
+    <string name="unicode_signs_quick_text_key_name">ნიშნები</string>
+    <string name="unicode_city_quick_text_key_name">ქალაქი</string>
+    <string name="unicode_scape_quick_text_key_name">ადგილები</string>
+    <string name="unicode_activity_quick_text_key_name">საქმიანობა</string>
+    <string name="unicode_office_quick_text_key_name">სამუშაო</string>
+    <string name="unicode_occasions_quick_text_key_name">საზეიმო</string>
+    <string name="unicode_flags_quick_text_key_name">დროშები</string>
     <string name="multitap_timeout_title">დაყოვნება შეხებებს შორის</string>
     <string name="multitap_timeout_summary">დაყოვნება ღილაკებზე შეხებისას</string>
     <string name="settings_multitap_timeout_disabled">გამორთული</string>
@@ -542,8 +561,7 @@
     <!-- abbreviations editor -->
     <string name="abbreviation_dict_settings_titlebar">შემოკლებების შემსწორებელი</string>
     <string name="abbreviation_dict_editor">შემოკლებების შემსწორებელი</string>
-    <string name="abbreviation_dict_word_template">
-        <i>
+    <string name="abbreviation_dict_word_template">        <i>
             <xliff:g id="abbreviation">%s</xliff:g>
         </i>
         \u0020\u2192\u0020
@@ -630,8 +648,7 @@
     <string name="setup_wizard_step_three_title">შემდეგი ნაბიჯი</string>
     <string name="setup_wizard_step_three_details">გმადლობთ, რომ აირჩიეთ <i>AnySoftKeyboard</i>.
     </string>
-    <string name="setup_wizard_step_three_details_done">
-        <b>მზადაა 🎉\nგახსენით სასურველი აპი და გამოცადეთ.</b>
+    <string name="setup_wizard_step_three_details_done">        <b>მზადაა 🎉\nგახსენით სასურველი აპი და გამოცადეთ.</b>
     </string>
     <string name="setup_wizard_step_three_details_actions">ან აქვე შეგიძლიათ შეცვალოთ და მოირგოთ
         კლავიატურა თქვენი გემოვნებით:
@@ -742,7 +759,6 @@
     <string name="allow_layouts_to_provide_generic_rows_on_summary">განლაგებებში საერთო რიგის ჩამატების ნებართვა.</string>
     <string name="gesture_typing_settings">ჟესტებით აკრეფა ➿</string>
     <string name="gesture_typing_summary">სიტყვის შეყვანა, შემადგენელ ასონიშნებზე თითის გადასმით.</string>
-    <string name="gesture_typing_disabled_low_ram">ჟესტები გათიშულია მცირე მეხსიერების მქონე მოწყობილობებზე ტექსტის შეუფერხებლად აკრეფისთვის.</string>
     <string name="gesture_typing_action">ჩაირთოს ჟესტებით აკრეფა [BETA]</string>
     <string name="gesture_typing_alert_title">BETA შესაძლებლობა!</string>
     <string name="gesture_typing_alert_message">ჟესტებით აკრეფის ➿ შესაძლებლობა ჯერ საცდელ, <b>Beta</b>-საფეხურზეა. ხარვეზებიანი, ნაკლებად სწრაფი და დაუსრულებელია.\nმოკლედ, ჯობია, თავად მოსინჯოთ.</string>
@@ -768,7 +784,4 @@
     <string name="wizard_allow_notification_permission">შეტყობინენებების ნების დართვა AnySoftKeyboard-დან</string>
     <string name="setup_wizard_step_notification_permissions_details">იშვიათად (მაგალითად უეცარი გათიშვისას) საჭიროა გამოჩნდეს შეტყობინება მოწყობილობაზე. სასურველია დართოთ ნება, მაგრამ ამის გარეშეც ჩვეულებრივ იმუშავებს.</string>
     <string name="wizard_skip_notification_permission">შეტყობინებების უარყოფა</string>
-    <string name="touch_trajectory_correction_title">შეხების მიმართულების შესწორება</string>
-    <string name="touch_trajectory_correction_summary_on">აუმჯობესებს სიზუსტეს შეხებით დაწოლა-აშვების ურთიერთშეფარდებით სწრაფი აკრეფისას</string>
-    <string name="touch_trajectory_correction_summary_off">ეფუძნება უშუალოდ დაწოლა-აშვების ფარდობას</string>
 </resources>

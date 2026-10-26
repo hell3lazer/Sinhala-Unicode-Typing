@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<KeyboardThemes>
+    <KeyboardTheme
+        description="@string/hell3lazer_blue_keyboard_theme_description"
+        iconsThemeRes="@style/Hell3LazerBlueKeyIconTheme"
+        id="a05b38f8-b3d5-45de-9856-9b16ab2b7ed0"
+        index="1"
+        nameResId="@string/hell3lazer_blue_keyboard_theme_name"
+        popupThemeRes="@style/Hell3LazerBluePopup"
+        themeRes="@style/Hell3LazerBlueTheme" />
+    <KeyboardTheme
+        description="@string/hell3lazer_dark_keyboard_theme_description"
+        iconsThemeRes="@style/Hell3LazerDarkKeyIconTheme"
+        id="b14b82f9-12f4-41d3-9821-4f32ba5f8a00"
+        index="2"
+        nameResId="@string/hell3lazer_dark_keyboard_theme_name"
+        popupThemeRes="@style/Hell3LazerDarkPopup"
+        themeRes="@style/Hell3LazerDarkTheme" />
+    <KeyboardTheme
+        description="@string/hell3lazer_tl_keyboard_theme_description"
+        iconsThemeRes="@style/Hell3LazertlKeyIconTheme"
+        id="c25b82f9-12f4-41d3-9821-4f32ba5f8a00"
+        index="3"
+        nameResId="@string/hell3lazer_tl_keyboard_theme_name"
+        popupThemeRes="@style/Hell3LazertlPopup"
+        themeRes="@style/Hell3LazertlTheme" />
+    <KeyboardTheme
+        description="@string/hell3lazer_tr_keyboard_theme_description"
+        iconsThemeRes="@style/Hell3LazertrKeyIconTheme"
+        id="d35b82f9-12f4-41d3-9821-4f32ba5f8a00"
+        index="4"
+        nameResId="@string/hell3lazer_tr_keyboard_theme_name"
+        popupThemeRes="@style/Hell3LazertrPopup"
+        themeRes="@style/Hell3LazertrTheme" />
+    <KeyboardTheme
+        description="@string/hell3lazer_bl_keyboard_theme_description"
+        iconsThemeRes="@style/Hell3LazerblKeyIconTheme"
+        id="e45b82f9-12f4-41d3-9821-4f32ba5f8a00"
+        index="5"
+        nameResId="@string/hell3lazer_bl_keyboard_theme_name"
+        popupThemeRes="@style/Hell3LazerblPopup"
+        themeRes="@style/Hell3LazerblTheme" />
+    <KeyboardTheme
+        description="@string/hell3lazer_br_keyboard_theme_description"
+        iconsThemeRes="@style/Hell3LazerbrKeyIconTheme"
+        id="f55b82f9-12f4-41d3-9821-4f32ba5f8a00"
+        index="6"
+        nameResId="@string/hell3lazer_br_keyboard_theme_name"
+        popupThemeRes="@style/Hell3LazerbrPopup"
+        themeRes="@style/Hell3LazerbrTheme" />
+    <KeyboardTheme
+        description="@string/hell3lazer_light_blue_keyboard_theme_description"
+        iconsThemeRes="@style/Hell3LazerLightBlueKeyIconTheme"
+        id="g65b82f9-12f4-41d3-9821-4f32ba5f8a00"
+        index="7"
+        nameResId="@string/hell3lazer_light_blue_keyboard_theme_name"
+        popupThemeRes="@style/Hell3LazerLightBluePopup"
+        themeRes="@style/Hell3LazerLightBlueTheme" />
+    <KeyboardTheme
+        description=""
+        hidden="true"
+        iconsThemeRes="@style/AnyKeyboardBaseKeyIconTheme"
+        id="2a94cf8c-266c-47fd-8c8c-c9c57d28d7dc"
+        index="0"
+        nameResId="@string/default_values_keyboard_theme_name"
+        popupThemeRes="@style/AnyKeyboardPopupBaseTheme"
+        themeRes="@style/AnyKeyboardBaseTheme" />
+</KeyboardThemes>

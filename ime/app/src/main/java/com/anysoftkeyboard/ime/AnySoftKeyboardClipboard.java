@@ -298,15 +298,14 @@ public abstract class AnySoftKeyboardClipboard extends AnySoftKeyboardSwipeListe
 
             @Override
             public void onSetupDialogRequired(
-                AlertDialog.Builder builder, int optionId, @Nullable Object data) {
+                Context context, AlertDialog.Builder builder, int optionId, @Nullable Object data) {
               builder.setNeutralButton(
                   R.string.delete_all_clipboard_entries,
                   (dialog, which) -> {
                     mClipboard.deleteAllEntries();
                     dialog.dismiss();
                   });
-              builder.setAdapter(
-                  new ClipboardEntriesAdapter(builder.getContext(), entries), onClickListener);
+              builder.setAdapter(new ClipboardEntriesAdapter(context, entries), onClickListener);
             }
           });
     }
@@ -316,26 +315,21 @@ public abstract class AnySoftKeyboardClipboard extends AnySoftKeyboardSwipeListe
     if (mClipboard.isOsClipboardEmpty()) {
       showToastMessage(R.string.clipboard_is_empty_toast, true);
     } else {
-      final InputConnection ic = getCurrentInputConnection();
-      if (ic == null || !ic.performContextMenuAction(android.R.id.paste)) {
-        // let the OS perform the paste (it may be a complex clip, better not handle it)
-        sendDownUpKeyEvents(KeyEvent.KEYCODE_V, KeyEvent.META_CTRL_ON);
-      }
+      // let the OS perform the paste (it may be a complex clip, better not handle it)
+      sendDownUpKeyEvents(KeyEvent.KEYCODE_V, KeyEvent.META_CTRL_ON);
     }
   }
 
   private void performCopy(boolean alsoCut) {
-    final InputConnection ic = getCurrentInputConnection();
-    final int actionId = alsoCut ? android.R.id.cut : android.R.id.copy;
-    if (ic == null || !ic.performContextMenuAction(actionId)) {
-      if (alsoCut) {
-        sendDownUpKeyEvents(KeyEvent.KEYCODE_X, KeyEvent.META_CTRL_ON);
-      } else {
-        sendDownUpKeyEvents(KeyEvent.KEYCODE_C, KeyEvent.META_CTRL_ON);
+    if (alsoCut) {
+      sendDownUpKeyEvents(KeyEvent.KEYCODE_X, KeyEvent.META_CTRL_ON);
+    } else {
+      sendDownUpKeyEvents(KeyEvent.KEYCODE_C, KeyEvent.META_CTRL_ON);
+      // showing toast, since there isn't any other UI feedback
+      // starting with Android 33, the OS shows a thing
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        showToastMessage(R.string.clipboard_copy_done_toast, true);
       }
-    }
-    if (!alsoCut && Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-      showToastMessage(R.string.clipboard_copy_done_toast, true);
     }
   }
 

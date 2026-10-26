@@ -42,7 +42,7 @@ class SimpleVersionGeneratorPlugin : Plugin<Project> {
 
           versionConf.versionData =
               VersionGeneratorFactory()
-                  .generateVersion(versionConf.major, versionConf.minor, 0, generators)
+                  .generateVersion(versionConf.major, versionConf.minor, versionConf.patchOffset, generators)
                   .also { verData ->
                     println(
                         "Generated version ${verData.versionName} (version-code ${verData.versionCode}). Using ${verData.generator.name} for versioning.")

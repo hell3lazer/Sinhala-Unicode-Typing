@@ -102,9 +102,7 @@ public class MainFragment extends Fragment {
 
     mDialogController =
         new GeneralDialogController(
-            getActivity(),
-            net.evendanan.pixel.R.style.Theme_AskAlertDialog,
-            this::onSetupDialogRequired);
+            getActivity(), R.style.Theme_AskAlertDialog, this::onSetupDialogRequired);
     final ViewGroup latestChangeLogCard = view.findViewById(R.id.latest_change_log_card);
     final View latestChangeLogCardContent =
         ChangeLogFragment.LatestChangeLogViewFactory.createLatestChangeLogView(
@@ -115,9 +113,9 @@ public class MainFragment extends Fragment {
                     .navigate(MainFragmentDirections.actionMainFragmentToFullChangeLogFragment()));
     latestChangeLogCard.addView(latestChangeLogCardContent);
     View testingView = view.findViewById(R.id.testing_build_message);
-    testingView.setVisibility(mTestingBuild ? View.VISIBLE : View.GONE);
+    testingView.setVisibility(View.GONE);
     View testerSignUp = view.findViewById(R.id.beta_sign_up);
-    testerSignUp.setVisibility(mTestingBuild ? View.GONE : View.VISIBLE);
+    testerSignUp.setVisibility(View.GONE);
     mDemoAnyKeyboardView = view.findViewById(R.id.demo_keyboard_view);
     mNoNotificationPermissionView =
         view.findViewById(R.id.no_notifications_permission_click_here_root);
@@ -135,23 +133,23 @@ public class MainFragment extends Fragment {
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    final int itemId = item.getItemId();
-    if (itemId == R.id.about_menu_option) {
-      Navigation.findNavController(requireView())
-          .navigate(MainFragmentDirections.actionMainFragmentToAboutAnySoftKeyboardFragment());
-      return true;
-    } else if (itemId == R.id.tweaks_menu_option) {
-      Navigation.findNavController(requireView())
-          .navigate(MainFragmentDirections.actionMainFragmentToMainTweaksFragment());
-      return true;
-    } else if (itemId == R.id.backup_prefs) {
-      mDialogController.showDialog(R.id.backup_prefs);
-      return true;
-    } else if (itemId == R.id.restore_prefs) {
-      mDialogController.showDialog(R.id.restore_prefs);
-      return true;
-    } else {
-      return super.onOptionsItemSelected(item);
+    switch (item.getItemId()) {
+      case R.id.about_menu_option:
+        Navigation.findNavController(requireView())
+            .navigate(MainFragmentDirections.actionMainFragmentToAboutAnySoftKeyboardFragment());
+        return true;
+      case R.id.tweaks_menu_option:
+        Navigation.findNavController(requireView())
+            .navigate(MainFragmentDirections.actionMainFragmentToMainTweaksFragment());
+        return true;
+      case R.id.backup_prefs:
+        mDialogController.showDialog(R.id.backup_prefs);
+        return true;
+      case R.id.restore_prefs:
+        mDialogController.showDialog(R.id.restore_prefs);
+        return true;
+      default:
+        return super.onOptionsItemSelected(item);
     }
   }
 
@@ -189,6 +187,8 @@ public class MainFragment extends Fragment {
     sb.setSpan(csp, start, start + length, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
     clickHere.setMovementMethod(LinkMovementMethod.getInstance());
     clickHere.setText(sb);
+    clickHere.setOnClickListener(
+        v -> startActivity(new Intent(requireContext(), SetupWizardActivity.class)));
 
     ClickableSpan socialLink =
         new ClickableSpan() {
@@ -286,8 +286,10 @@ public class MainFragment extends Fragment {
                         Color.argb(
                             200 /*~80% alpha*/, backgroundRed, backgroundGreed, backgroundBlue);
                     TextView gplusLink = rootView.findViewById(R.id.ask_social_link);
-                    gplusLink.setTextColor(swatch.getTitleTextColor());
-                    gplusLink.setBackgroundColor(backgroundColor);
+                    if (gplusLink != null && gplusLink.getVisibility() == View.VISIBLE) {
+                      gplusLink.setTextColor(swatch.getTitleTextColor());
+                      gplusLink.setBackgroundColor(backgroundColor);
+                    }
                   }
                 },
                 throwable ->
@@ -307,27 +309,35 @@ public class MainFragment extends Fragment {
     mDialogController.dismiss();
   }
 
-  private void onSetupDialogRequired(AlertDialog.Builder builder, int optionId, Object data) {
-    if (optionId == R.id.backup_prefs || optionId == R.id.restore_prefs) {
-      onBackupRestoreDialogRequired(builder, optionId);
-    } else if (optionId == DIALOG_SAVE_SUCCESS) {
-      builder.setTitle(R.string.prefs_providers_operation_success);
-      builder.setMessage(getString(R.string.prefs_providers_backed_up_to, data));
-      builder.setPositiveButton(android.R.string.ok, null);
-    } else if (optionId == DIALOG_SAVE_FAILED) {
-      builder.setTitle(R.string.prefs_providers_operation_failed);
-      builder.setMessage(getString(R.string.prefs_providers_failed_backup_due_to, data));
-      builder.setPositiveButton(android.R.string.ok, null);
-    } else if (optionId == DIALOG_LOAD_SUCCESS) {
-      builder.setTitle(R.string.prefs_providers_operation_success);
-      builder.setMessage(getString(R.string.prefs_providers_restored_to, data));
-      builder.setPositiveButton(android.R.string.ok, null);
-    } else if (optionId == DIALOG_LOAD_FAILED) {
-      builder.setTitle(R.string.prefs_providers_operation_failed);
-      builder.setMessage(getString(R.string.prefs_providers_failed_restore_due_to, data));
-      builder.setPositiveButton(android.R.string.ok, null);
-    } else {
-      throw new IllegalArgumentException("The option-id " + optionId + " is not supported here.");
+  private void onSetupDialogRequired(
+      Context context, AlertDialog.Builder builder, int optionId, Object data) {
+    switch (optionId) {
+      case R.id.backup_prefs:
+      case R.id.restore_prefs:
+        onBackupRestoreDialogRequired(builder, optionId);
+        break;
+      case DIALOG_SAVE_SUCCESS:
+        builder.setTitle(R.string.prefs_providers_operation_success);
+        builder.setMessage(getString(R.string.prefs_providers_backed_up_to, data));
+        builder.setPositiveButton(android.R.string.ok, null);
+        break;
+      case DIALOG_SAVE_FAILED:
+        builder.setTitle(R.string.prefs_providers_operation_failed);
+        builder.setMessage(getString(R.string.prefs_providers_failed_backup_due_to, data));
+        builder.setPositiveButton(android.R.string.ok, null);
+        break;
+      case DIALOG_LOAD_SUCCESS:
+        builder.setTitle(R.string.prefs_providers_operation_success);
+        builder.setMessage(getString(R.string.prefs_providers_restored_to, data));
+        builder.setPositiveButton(android.R.string.ok, null);
+        break;
+      case DIALOG_LOAD_FAILED:
+        builder.setTitle(R.string.prefs_providers_operation_failed);
+        builder.setMessage(getString(R.string.prefs_providers_failed_restore_due_to, data));
+        builder.setPositiveButton(android.R.string.ok, null);
+        break;
+      default:
+        throw new IllegalArgumentException("The option-id " + optionId + " is not supported here.");
     }
   }
 
@@ -335,16 +345,20 @@ public class MainFragment extends Fragment {
     @StringRes final int actionTitle;
 
     final String intentAction;
-    if (optionId == R.id.backup_prefs) {
-      actionTitle = R.string.word_editor_action_backup_words;
-      intentAction = Intent.ACTION_CREATE_DOCUMENT;
-      builder.setTitle(R.string.pick_prefs_providers_to_backup);
-    } else if (optionId == R.id.restore_prefs) {
-      actionTitle = R.string.word_editor_action_restore_words;
-      intentAction = Intent.ACTION_OPEN_DOCUMENT;
-      builder.setTitle(R.string.pick_prefs_providers_to_restore);
-    } else {
-      throw new IllegalArgumentException("The option-id " + optionId + " is not supported here.");
+    switch (optionId) {
+      case R.id.backup_prefs -> {
+        actionTitle = R.string.word_editor_action_backup_words;
+        intentAction = Intent.ACTION_CREATE_DOCUMENT;
+        builder.setTitle(R.string.pick_prefs_providers_to_backup);
+      }
+      case R.id.restore_prefs -> {
+        actionTitle = R.string.word_editor_action_restore_words;
+        intentAction = Intent.ACTION_OPEN_DOCUMENT;
+        builder.setTitle(R.string.pick_prefs_providers_to_restore);
+      }
+      default ->
+          throw new IllegalArgumentException(
+              "The option-id " + optionId + " is not supported here.");
     }
 
     supportedProviders = GlobalPrefsBackup.getAllPrefsProviders(requireContext());

@@ -6,7 +6,6 @@ import static com.anysoftkeyboard.keyboards.ExternalAnyKeyboardTest.SIMPLE_Keybo
 import android.content.res.Configuration;
 import android.os.SystemClock;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import androidx.test.core.app.ApplicationProvider;
@@ -407,29 +406,46 @@ public class AnySoftKeyboardGimmicksTest extends AnySoftKeyboardBaseTest {
   }
 
   @Test
-  public void testCommitsNewlineForPlainEnterWithoutAction() {
-    // Plain ENTER (no shift, no IME action) must be committed via commitText("\n", 1) and NOT via
-    // sendKeyEvent(KEYCODE_ENTER). Some editors handle KEYCODE_ENTER by re-inserting the just-
-    // committed composing text, producing a duplicate word on the new line.
+  public void testSendsENTERKeyEventIfShiftIsNotPressedAndImeDoesNotHaveAction() {
     TestInputConnection inputConnection = getCurrentTestInputConnection();
     mAnySoftKeyboardUnderTest.simulateKeyPress(KeyCodes.ENTER);
 
-    Mockito.verify(inputConnection, Mockito.never()).sendKeyEvent(Mockito.any(KeyEvent.class));
-    Mockito.verify(inputConnection).commitText("\n", 1);
+    ArgumentCaptor<KeyEvent> keyEventArgumentCaptor = ArgumentCaptor.forClass(KeyEvent.class);
+    Mockito.verify(inputConnection, Mockito.times(2))
+        .sendKeyEvent(keyEventArgumentCaptor.capture());
+
+    Assert.assertEquals(2 /* down and up */, keyEventArgumentCaptor.getAllValues().size());
+    Assert.assertEquals(
+        KeyEvent.KEYCODE_ENTER, keyEventArgumentCaptor.getAllValues().get(0).getKeyCode());
+    Assert.assertEquals(
+        KeyEvent.ACTION_DOWN, keyEventArgumentCaptor.getAllValues().get(0).getAction());
+    Assert.assertEquals(
+        KeyEvent.KEYCODE_ENTER, keyEventArgumentCaptor.getAllValues().get(1).getKeyCode());
+    Assert.assertEquals(
+        KeyEvent.ACTION_UP, keyEventArgumentCaptor.getAllValues().get(1).getAction());
+    // and never the ENTER character
     Assert.assertEquals("\n", inputConnection.getCurrentTextInInputConnection());
   }
 
   @Test
-  public void testCommitsNewlineWhenShiftHeldButNoImeAction() {
-    // Shift alone without an IME action still means "insert a newline". The Shift+Enter
-    // KeyEvent path in AnySoftKeyboard.onNonFunctionKey requires mShiftKeyState.isPressed(); a
-    // simulateKeyPress here does not press shift, so we fall through to handleSeparator and must
-    // commit "\n" — same reason as the plain-ENTER case above.
+  public void testSendsENTERKeyEventIfShiftIsPressedAndImeDoesNotHaveAction() {
     TestInputConnection inputConnection = getCurrentTestInputConnection();
     mAnySoftKeyboardUnderTest.simulateKeyPress(KeyCodes.ENTER);
 
-    Mockito.verify(inputConnection, Mockito.never()).sendKeyEvent(Mockito.any(KeyEvent.class));
-    Mockito.verify(inputConnection).commitText("\n", 1);
+    ArgumentCaptor<KeyEvent> keyEventArgumentCaptor = ArgumentCaptor.forClass(KeyEvent.class);
+    Mockito.verify(inputConnection, Mockito.times(2))
+        .sendKeyEvent(keyEventArgumentCaptor.capture());
+
+    Assert.assertEquals(2 /* down and up */, keyEventArgumentCaptor.getAllValues().size());
+    Assert.assertEquals(
+        KeyEvent.KEYCODE_ENTER, keyEventArgumentCaptor.getAllValues().get(0).getKeyCode());
+    Assert.assertEquals(
+        KeyEvent.ACTION_DOWN, keyEventArgumentCaptor.getAllValues().get(0).getAction());
+    Assert.assertEquals(
+        KeyEvent.KEYCODE_ENTER, keyEventArgumentCaptor.getAllValues().get(1).getKeyCode());
+    Assert.assertEquals(
+        KeyEvent.ACTION_UP, keyEventArgumentCaptor.getAllValues().get(1).getAction());
+    // and we have ENTER in the input-connection
     Assert.assertEquals("\n", inputConnection.getCurrentTextInInputConnection());
   }
 
@@ -492,11 +508,7 @@ public class AnySoftKeyboardGimmicksTest extends AnySoftKeyboardBaseTest {
 
   @Test
   public void testDeleteWholeWordWhenShiftAndBackSpaceArePressed() {
-    EditorInfo editorInfo = createEditorInfoTextWithSuggestionsForSetUp();
-    editorInfo.inputType |= TextUtils.CAP_MODE_SENTENCES;
-    simulateOnStartInputFlow(false, editorInfo);
     TestInputConnection inputConnection = getCurrentTestInputConnection();
-    inputConnection.setRealCapsMode(true);
 
     mAnySoftKeyboardUnderTest.simulateTextTyping("hello");
     Assert.assertEquals("hello", inputConnection.getCurrentTextInInputConnection());
@@ -505,28 +517,6 @@ public class AnySoftKeyboardGimmicksTest extends AnySoftKeyboardBaseTest {
     mAnySoftKeyboardUnderTest.simulateKeyPress(KeyCodes.DELETE);
 
     Assert.assertEquals("", inputConnection.getCurrentTextInInputConnection());
-
-    mAnySoftKeyboardUnderTest.onRelease(KeyCodes.SHIFT);
-    Assert.assertTrue(mAnySoftKeyboardUnderTest.getCurrentKeyboardForTests().isShifted());
-  }
-
-  @Test
-  public void testShiftEnterRestoresAutoCaps() {
-    EditorInfo editorInfo = createEditorInfoTextWithSuggestionsForSetUp();
-    editorInfo.inputType |= TextUtils.CAP_MODE_SENTENCES;
-    simulateOnStartInputFlow(false, editorInfo);
-    TestInputConnection inputConnection = getCurrentTestInputConnection();
-    inputConnection.setRealCapsMode(true);
-
-    mAnySoftKeyboardUnderTest.simulateTextTyping("hello");
-    Assert.assertEquals("hello", inputConnection.getCurrentTextInInputConnection());
-
-    mAnySoftKeyboardUnderTest.onPress(KeyCodes.SHIFT);
-    mAnySoftKeyboardUnderTest.simulateKeyPress(KeyCodes.ENTER);
-    mAnySoftKeyboardUnderTest.onRelease(KeyCodes.SHIFT);
-
-    Assert.assertEquals("hello\n", inputConnection.getCurrentTextInInputConnection());
-    Assert.assertTrue(mAnySoftKeyboardUnderTest.getCurrentKeyboardForTests().isShifted());
   }
 
   @Test
@@ -1249,10 +1239,10 @@ public class AnySoftKeyboardGimmicksTest extends AnySoftKeyboardBaseTest {
         new ExternalAnyKeyboard(
             currentKeyboard.getKeyboardAddOn(),
             ApplicationProvider.getApplicationContext(),
-            com.anysoftkeyboard.language.english.pack.R.xml.qwerty,
-            com.anysoftkeyboard.language.english.pack.R.xml.qwerty,
+            R.xml.qwerty,
+            R.xml.qwerty,
             "fr",
-            com.anysoftkeyboard.language.english.pack.R.drawable.ic_status_english,
+            R.drawable.ic_status_english,
             0,
             "fr",
             "",

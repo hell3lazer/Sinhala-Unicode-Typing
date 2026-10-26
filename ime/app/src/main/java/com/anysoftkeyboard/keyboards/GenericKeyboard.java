@@ -57,11 +57,6 @@ public class GenericKeyboard extends ExternalAnyKeyboard {
     }
   }
 
-  @Override
-  public boolean isAlphabetKeyboard() {
-    return false;
-  }
-
   @NonNull
   @Override
   public String getKeyboardId() {

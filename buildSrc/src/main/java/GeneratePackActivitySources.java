@@ -84,14 +84,15 @@ public class GeneratePackActivitySources extends DefaultTask {
   @InputFile
   @PathSensitive(RELATIVE)
   public File getActivityTemplateFile() {
-    return new File(getProject().getRootDir(), "addons/StoreStuff/assets/MainActivity.kt.template");
+    return new File(
+        getProject().getRootDir(), "addons/StoreStuff/assets/MainActivity.java.template");
   }
 
   @InputFile
   @PathSensitive(RELATIVE)
   public File getActivityTestTemplateFile() {
     return new File(
-        getProject().getRootDir(), "addons/StoreStuff/assets/MainActivityTest.kt.template");
+        getProject().getRootDir(), "addons/StoreStuff/assets/MainActivityTest.java.template");
   }
 
   @InputFile
@@ -209,11 +210,7 @@ public class GeneratePackActivitySources extends DefaultTask {
   }
 
   private void createActivityJavaSourceFile() throws IOException {
-    var legacyJavaTarget = new File(getOutputSrcFolder(), "MainActivity.java");
-    if (legacyJavaTarget.exists()) {
-      legacyJavaTarget.delete();
-    }
-    var srcTarget = new File(getOutputSrcFolder(), "MainActivity.kt");
+    var srcTarget = new File(getOutputSrcFolder(), "MainActivity.java");
     clearTargetFile(srcTarget);
 
     Files.writeString(
@@ -223,11 +220,7 @@ public class GeneratePackActivitySources extends DefaultTask {
   }
 
   private void createActivityTestJavaSourceFile() throws IOException {
-    var legacyJavaTarget = new File(getOutputTestSrcFolder(), "MainActivityTest.java");
-    if (legacyJavaTarget.exists()) {
-      legacyJavaTarget.delete();
-    }
-    var srcTarget = new File(getOutputTestSrcFolder(), "MainActivityTest.kt");
+    var srcTarget = new File(getOutputTestSrcFolder(), "MainActivityTest.java");
     clearTargetFile(srcTarget);
 
     Files.writeString(

@@ -19,6 +19,7 @@ package com.anysoftkeyboard.theme;
 import android.content.Context;
 import androidx.annotation.StyleRes;
 import com.anysoftkeyboard.addons.AddOnImpl;
+import com.menny.android.anysoftkeyboard.R;
 
 public class KeyboardTheme extends AddOnImpl {
 
@@ -51,7 +52,7 @@ public class KeyboardTheme extends AddOnImpl {
         popupIconsThemeResId == INVALID_RES_ID ? mIconsThemeResId : popupIconsThemeResId;
     mGestureTrailThemeResId =
         gestureTrailThemeResId == INVALID_RES_ID
-            ? com.anysoftkeyboard.gesturetyping.R.style.AnyKeyboardGestureTrailTheme
+            ? R.style.AnyKeyboardGestureTrailTheme
             : gestureTrailThemeResId;
   }
 

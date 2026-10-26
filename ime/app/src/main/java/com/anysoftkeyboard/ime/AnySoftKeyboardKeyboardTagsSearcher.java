@@ -19,7 +19,6 @@ package com.anysoftkeyboard.ime;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.XmlResourceParser;
-import android.text.TextUtils;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -56,8 +55,6 @@ public abstract class AnySoftKeyboardKeyboardTagsSearcher extends AnySoftKeyboar
   private SharedPreferences mSharedPrefsNotToUse;
   private final SharedPreferences.OnSharedPreferenceChangeListener mUpdatedPrefKeysListener =
       (sharedPreferences, key) -> {
-        // null/empty key is received when SharedPreferences is cleared
-        if (TextUtils.isEmpty(key)) return;
         if (key.startsWith(QuickTextKeyFactory.PREF_ID_PREFIX) && mTagsExtractor.isEnabled()) {
           // forcing reload
           setupTagsSearcher();
@@ -69,7 +66,6 @@ public abstract class AnySoftKeyboardKeyboardTagsSearcher extends AnySoftKeyboar
     super.onCreate();
     final RxSharedPrefs prefs = prefs();
     mQuickKeyHistoryRecords = new QuickKeyHistoryRecords(prefs);
-    addDisposable(mQuickKeyHistoryRecords);
     addDisposable(
         prefs
             .getBoolean(

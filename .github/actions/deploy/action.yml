@@ -35,7 +35,7 @@ runs:
       with:
         distribution: 'temurin'
         java-version: '21'
-    - uses: android-actions/setup-android@v4
+    - uses: android-actions/setup-android@v3
       with:
         cmdline-tools-version: 13114758
     - name: Install NDK
@@ -43,7 +43,7 @@ runs:
       run: echo "y" | sdkmanager "ndk;29.0.14206865"
     - name: Install ImageMagick
       shell: bash
-      run: sudo apt-get update && sudo apt-get install -y imagemagick
+      run: sudo apt-get install -y imagemagick
     - shell: bash
       env:
         TERM: dumb

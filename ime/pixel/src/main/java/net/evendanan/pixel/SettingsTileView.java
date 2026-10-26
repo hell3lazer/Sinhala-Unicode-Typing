@@ -46,7 +46,10 @@ public class SettingsTileView extends LinearLayout {
   }
 
   private void setupBasicLayoutConfiguration() {
-    setBackgroundResource(R.drawable.transparent_click_feedback_background);
+    setBackgroundResource(R.drawable.modern_tile_background);
+    int hPad = (int) (16 * getResources().getDisplayMetrics().density);
+    int vPad = (int) (14 * getResources().getDisplayMetrics().density);
+    setPadding(hPad, vPad, hPad, vPad);
     if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
       setOrientation(LinearLayout.VERTICAL);
       setLayoutParams(new LayoutParams(0, LayoutParams.MATCH_PARENT, 1f));

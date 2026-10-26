@@ -483,7 +483,26 @@ Zmiana
     <string name="change_symbols_regular">123</string>
     <string name="select_keyboard_popup_title">Wybierz klawiaturę</string>
     <!-- dictionaries -->
+    <string name="simley_key_name">Klawisz buźki</string>
+    <string name="short_smiley_key_name">Krótszy klawisz emoji</string>
+    <string name="quick_text_kaomoji">Kaomoji</string>
     <string name="history_quick_text_key_name">Historia</string>
+    <string name="default_quick_text_key_name">Proste Emotikony</string>
+    <string name="unicode_quick_text_key_name">Emotikony</string>
+    <string name="unicode_people_quick_text_key_name">Ludzie</string>
+    <string name="unicode_gestures_quick_text_key_name">Gesty</string>
+    <string name="unicode_accessories_quick_text_key_name">Akcesoria</string>
+    <string name="unicode_animals_quick_text_key_name">Zwierzęta</string>
+    <string name="unicode_food_quick_text_key_name">Jedzenie</string>
+    <string name="unicode_nature_quick_text_key_name">Natura</string>
+    <string name="unicode_transport_quick_text_key_name">Transport</string>
+    <string name="unicode_signs_quick_text_key_name">Znaki</string>
+    <string name="unicode_city_quick_text_key_name">Miasto</string>
+    <string name="unicode_scape_quick_text_key_name">Krajobraz</string>
+    <string name="unicode_activity_quick_text_key_name">Aktywność</string>
+    <string name="unicode_office_quick_text_key_name">Biuro</string>
+    <string name="unicode_occasions_quick_text_key_name">Okazje</string>
+    <string name="unicode_flags_quick_text_key_name">Flagi</string>
     <string name="multitap_timeout_title">Czas wielokrotnego dotknięcia</string>
     <string name="multitap_timeout_summary">Limit czasu między dotknięciami klawisza</string>
     <string name="settings_multitap_timeout_disabled">Wyłączone</string>
@@ -530,8 +549,7 @@ Zmiana
     <!-- abbreviations editor -->
     <string name="abbreviation_dict_settings_titlebar">Edytor skrótów</string>
     <string name="abbreviation_dict_editor">Edytor skrótów</string>
-    <string name="abbreviation_dict_word_template">
-        <i>
+    <string name="abbreviation_dict_word_template">        <i>
             <xliff:g id="abbreviation">%s</xliff:g>
         </i>
         \u0020\u2192\u0020
@@ -617,8 +635,7 @@ Zmiana
     <string name="setup_wizard_step_two_action">Zamień aktywne klawiatury</string>
     <string name="setup_wizard_step_three_title">Co dalej?</string>
     <string name="setup_wizard_step_three_details">Dziękujemy za wybór <i>AnySoftKeyboard</i>.    </string>
-    <string name="setup_wizard_step_three_details_done">
-        <b>To wszystko 🎉\nWłącz ulubioną aplikację, aby wypróbować.</b>    </string>
+    <string name="setup_wizard_step_three_details_done">        <b>To wszystko 🎉\nWłącz ulubioną aplikację, aby wypróbować.</b>    </string>
     <string name="setup_wizard_step_three_details_actions">Lub możesz dostosować i spersonalizować klawiaturę
         do swoich potrzeb:
     </string>

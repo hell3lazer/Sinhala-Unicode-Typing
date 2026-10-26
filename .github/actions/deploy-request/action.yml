@@ -26,24 +26,12 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Check deployment halt marker
-      id: check_halt
-      shell: bash
-      run: |
-        if [[ -f "deployment/halt_deployment_marker" ]]; then
-          echo "Halt marker file found (deployment/halt_deployment_marker). Skipping deployment request."
-          echo "skip=true" >> "${GITHUB_OUTPUT}"
-        else
-          echo "skip=false" >> "${GITHUB_OUTPUT}"
-        fi
-    - uses: bazel-contrib/setup-bazel@0.19.0
-      if: steps.check_halt.outputs.skip != 'true'
+    - uses: bazel-contrib/setup-bazel@0.18.0
       with:
         bazelisk-cache: true
         disk-cache: ${{ github.workflow }}
         repository-cache: true
     - name: Request IME Deployment
-      if: steps.check_halt.outputs.skip != 'true'
       shell: bash
       run: |
         bazel run //js/github_deployments -- deploy \
@@ -56,7 +44,6 @@ runs:
           --shardName=ime \
           --deployMode="${{ inputs.deploy_mode }}"
     - name: Request add-ons Deployment
-      if: steps.check_halt.outputs.skip != 'true'
       shell: bash
       run: |
         bazel run //js/github_deployments -- deploy \

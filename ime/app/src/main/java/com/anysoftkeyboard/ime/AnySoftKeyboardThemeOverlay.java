@@ -82,8 +82,7 @@ public abstract class AnySoftKeyboardThemeOverlay extends AnySoftKeyboardKeyboar
       private final OverlyDataCreator mActualCreator =
           new OverlayDataOverrider(
               new OverlayDataNormalizer(
-                  new OverlyDataCreatorForAndroid.Light(AnySoftKeyboardThemeOverlay.this),
-                  OverlayDataNormalizer.DEFAULT_TEXT_COLOR_DIFF),
+                  new OverlyDataCreatorForAndroid.Light(AnySoftKeyboardThemeOverlay.this), 96),
               createOverridesForOverlays());
 
       @Override

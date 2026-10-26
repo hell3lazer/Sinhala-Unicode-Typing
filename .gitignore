@@ -1,6 +1,5 @@
 build/
 .gradle/
-.kotlin/
 /.idea/
 .DS_Store
 *.iml
@@ -46,10 +45,6 @@ addons/.generated_pack_version
 node_modules
 /dist
 
-#python (addon data-generation scripts)
-__pycache__/
-*.pyc
-
 # IJ Bazel Plugin
 .aswb/
 
@@ -58,9 +53,11 @@ __pycache__/
 
 # personal scratch work area
 scratch/
+*.keystore
+*.zip
+*.jpg
+*.jpeg
+*.png.bak
+*.webp
+invert_icons.py
 
-# vscode plugins ignores
-.metals/
-buildSrc/.metals/
-.kotlin/
-buildSrc/.kotlin/

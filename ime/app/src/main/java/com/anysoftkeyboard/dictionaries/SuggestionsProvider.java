@@ -5,7 +5,6 @@ import static com.anysoftkeyboard.dictionaries.DictionaryBackgroundLoader.NO_OP_
 import android.content.Context;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import com.anysoftkeyboard.base.utils.Logger;
 import com.anysoftkeyboard.dictionaries.content.ContactsDictionary;
@@ -82,11 +81,6 @@ public class SuggestionsProvider {
   private int mCurrentSetupHashCode;
 
   @NonNull private final List<Dictionary> mMainDictionary = new ArrayList<>();
-
-  @NonNull
-  private List<DictionaryAddOnAndBuilder> mCurrentDictionaryBuilders = Collections.emptyList();
-
-  @NonNull private final List<RadicalDictionary> mRadicalDictionary = new ArrayList<>();
   @NonNull private final List<EditableDictionary> mUserDictionary = new ArrayList<>();
   @NonNull private final List<NextWordSuggestions> mUserNextWordDictionary = new ArrayList<>();
   private boolean mQuickFixesEnabled;
@@ -195,10 +189,8 @@ public class SuggestionsProvider {
     mPrefsDisposables.add(
         rxSharedPrefs
             .getString(
-                com.anysoftkeyboard.nextword.R.string
-                    .settings_key_next_word_suggestion_aggressiveness,
-                com.anysoftkeyboard.nextword.R.string
-                    .settings_default_next_word_suggestion_aggressiveness)
+                R.string.settings_key_next_word_suggestion_aggressiveness,
+                R.string.settings_default_next_word_suggestion_aggressiveness)
             .asObservable()
             .subscribe(
                 aggressiveness -> {
@@ -222,8 +214,8 @@ public class SuggestionsProvider {
     mPrefsDisposables.add(
         rxSharedPrefs
             .getString(
-                com.anysoftkeyboard.nextword.R.string.settings_key_next_word_dictionary_type,
-                com.anysoftkeyboard.nextword.R.string.settings_default_next_words_dictionary_type)
+                R.string.settings_key_next_word_dictionary_type,
+                R.string.settings_default_next_words_dictionary_type)
             .asObservable()
             .subscribe(
                 type -> {
@@ -298,7 +290,6 @@ public class SuggestionsProvider {
 
     close();
 
-    mCurrentDictionaryBuilders = new ArrayList<>(dictionaryBuilders);
     mCurrentSetupHashCode = newSetupHashCode;
     final CompositeDisposable disposablesHolder = mDictionaryDisposables;
 
@@ -311,33 +302,16 @@ public class SuggestionsProvider {
             dictionaryBuilder.getId(),
             dictionaryBuilder.getLanguage());
         final Dictionary dictionary = dictionaryBuilder.createDictionary();
-        if (dictionary != null) {
-          mMainDictionary.add(dictionary);
-          Logger.d(
-              TAG,
-              " Loading dictionary %s (%s)...",
-              dictionaryBuilder.getId(),
-              dictionaryBuilder.getLanguage());
-          disposablesHolder.add(
-              DictionaryBackgroundLoader.loadDictionaryInBackground(cb, dictionary));
-        }
+        mMainDictionary.add(dictionary);
+        Logger.d(
+            TAG,
+            " Loading dictionary %s (%s)...",
+            dictionaryBuilder.getId(),
+            dictionaryBuilder.getLanguage());
+        disposablesHolder.add(
+            DictionaryBackgroundLoader.loadDictionaryInBackground(cb, dictionary));
       } catch (Exception e) {
         Logger.e(TAG, e, "Failed to create dictionary %s", dictionaryBuilder.getId());
-      }
-
-      // Load radical dictionary if available
-      if (dictionaryBuilder.hasRadicalDictionary()) {
-        try {
-          final RadicalDictionary radicalDict = dictionaryBuilder.createRadicalDictionary();
-          if (radicalDict != null) {
-            mRadicalDictionary.add(radicalDict);
-            Logger.d(TAG, " Loading radical dictionary for %s...", dictionaryBuilder.getLanguage());
-            disposablesHolder.add(
-                DictionaryBackgroundLoader.loadDictionaryInBackground(cb, radicalDict));
-          }
-        } catch (Exception e) {
-          Logger.e(TAG, e, "Failed to create radical dictionary %s", dictionaryBuilder.getId());
-        }
       }
 
       if (mUserDictionaryEnabled) {
@@ -439,9 +413,7 @@ public class SuggestionsProvider {
   public void close() {
     Logger.d(TAG, "closeDictionaries");
     mCurrentSetupHashCode = 0;
-    mCurrentDictionaryBuilders = Collections.emptyList();
     mMainDictionary.clear();
-    mRadicalDictionary.clear();
     mAbbreviationDictionary.clear();
     mUserDictionary.clear();
     mQuickFixesAutoText.clear();
@@ -472,104 +444,6 @@ public class SuggestionsProvider {
     mContactsDictionary.getSuggestions(wordComposer, wordCallback);
     allDictionariesGetWords(mUserDictionary, wordComposer, wordCallback);
     allDictionariesGetWords(mMainDictionary, wordComposer, wordCallback);
-  }
-
-  public void getRadicalSuggestions(
-      KeyCodesProvider wordComposer, Dictionary.WordCallback wordCallback) {
-    allDictionariesGetWords(mRadicalDictionary, wordComposer, wordCallback);
-  }
-
-  public boolean hasRadicalDictionaries() {
-    return !mRadicalDictionary.isEmpty();
-  }
-
-  public boolean anyActiveDictionarySupportsGestureTyping() {
-    if (mCurrentDictionaryBuilders.isEmpty()) {
-      return true;
-    }
-    for (DictionaryAddOnAndBuilder builder : mCurrentDictionaryBuilders) {
-      if (builder.supportsGestureTyping()) return true;
-    }
-    return false;
-  }
-
-  /**
-   * Returns the merged exact-match radical dictionary candidates across all loaded radical
-   * dictionaries, preserving per-dictionary ordering. Returns an empty list if no dictionaries are
-   * loaded.
-   */
-  @NonNull
-  public List<String> getRadicalExactMatches(@NonNull String radicals) {
-    if (radicals.isEmpty()) return Collections.emptyList();
-    java.util.LinkedHashSet<String> all = new java.util.LinkedHashSet<>();
-    for (RadicalDictionary dict : mRadicalDictionary) {
-      all.addAll(dict.getExactMatches(radicals));
-    }
-    return new ArrayList<>(all);
-  }
-
-  public void getRadicalNextWords(
-      String previousWord, Collection<CharSequence> suggestionsHolder, int maxSuggestions) {
-    getRadicalNextWords(previousWord, null, suggestionsHolder, maxSuggestions);
-  }
-
-  public void getRadicalNextWords(
-      String previousWord,
-      @Nullable String radicalCode,
-      Collection<CharSequence> suggestionsHolder,
-      int maxSuggestions) {
-    if (maxSuggestions <= 0) return;
-    for (RadicalDictionary dict : mRadicalDictionary) {
-      List<String> suggestions = dict.getNextWordSuggestions(previousWord, radicalCode);
-      for (String suggestion : suggestions) {
-        suggestionsHolder.add(suggestion);
-        if (--maxSuggestions <= 0) return;
-      }
-    }
-  }
-
-  /**
-   * Looks up homophones for a character using the radical dictionary's Zhuyin data.
-   *
-   * @return list of homophone characters, with radical code info
-   */
-  @NonNull
-  public List<String> getHomophones(@NonNull String character) {
-    for (RadicalDictionary dict : mRadicalDictionary) {
-      List<String> result = dict.getHomophones(character);
-      if (!result.isEmpty()) return result;
-    }
-    return Collections.emptyList();
-  }
-
-  /** Gets the Boshiamy radical code for a character. */
-  @Nullable
-  public String getRadicalCode(@NonNull String character) {
-    for (RadicalDictionary dict : mRadicalDictionary) {
-      String result = dict.getRadicalCode(character);
-      if (result != null) return result;
-    }
-    return null;
-  }
-
-  /** Gets the phonetic pronunciation for a character. */
-  @Nullable
-  public String getPhonetic(@NonNull String character) {
-    for (RadicalDictionary dict : mRadicalDictionary) {
-      String result = dict.getPhonetic(character);
-      if (result != null) return result;
-    }
-    return null;
-  }
-
-  /** Returns true if homophone lookup data is available. */
-  public boolean hasHomophoneData() {
-    for (RadicalDictionary dict : mRadicalDictionary) {
-      if (dict.hasHomophoneData()) {
-        return true;
-      }
-    }
-    return false;
   }
 
   public void getAbbreviations(

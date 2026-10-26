@@ -70,7 +70,6 @@ public abstract class AnyKeyboard extends Keyboard {
   private int mMaxGenericRowsWidth = 0;
 
   private KeyboardCondenser mKeyboardCondenser;
-  private final boolean mSupportsGestureTyping;
 
   // for popup keyboard
   // note: the context can be from a different package!
@@ -81,11 +80,6 @@ public abstract class AnyKeyboard extends Keyboard {
       int xmlLayoutResId) {
     // should use the package context for creating the layout
     super(keyboardAddOn, askContext, xmlLayoutResId, KEYBOARD_ROW_MODE_NORMAL);
-    final KeyboardAddOnAndBuilder addOn =
-        (keyboardAddOn instanceof KeyboardAddOnAndBuilder)
-            ? (KeyboardAddOnAndBuilder) keyboardAddOn
-            : null;
-    mSupportsGestureTyping = addOn == null || addOn.supportsGestureTyping();
     // no generic rows in popup
   }
 
@@ -98,11 +92,6 @@ public abstract class AnyKeyboard extends Keyboard {
       @KeyboardRowModeId int mode) {
     // should use the package context for creating the layout
     super(keyboardAddOn, askContext, xmlLayoutResId, mode);
-    final KeyboardAddOnAndBuilder addOn =
-        (keyboardAddOn instanceof KeyboardAddOnAndBuilder)
-            ? (KeyboardAddOnAndBuilder) keyboardAddOn
-            : null;
-    mSupportsGestureTyping = addOn == null || addOn.supportsGestureTyping();
   }
 
   @Override
@@ -295,8 +284,7 @@ public abstract class AnyKeyboard extends Keyboard {
     final boolean disallowGenericRowsOverride =
         KeyboardPrefs.disallowGenericRowOverride(mLocalContext);
     mGenericRowsHeight = 0;
-    if ((!mTopRowWasCreated || disallowGenericRowsOverride)
-        && topRowPlugin.isCompatible(getKeyboardScope())) {
+    if (!mTopRowWasCreated || disallowGenericRowsOverride) {
       Logger.d(TAG, "Top row layout id %s", topRowPlugin.getId());
       GenericRowKeyboard rowKeyboard =
           new GenericRowKeyboard(
@@ -307,8 +295,7 @@ public abstract class AnyKeyboard extends Keyboard {
               mKeyboardMode);
       fixKeyboardDueToGenericRow(rowKeyboard, true);
     }
-    if ((!mBottomRowWasCreated || disallowGenericRowsOverride)
-        && bottomRowPlugin.isCompatible(getKeyboardScope())) {
+    if (!mBottomRowWasCreated || disallowGenericRowsOverride) {
       Logger.d(TAG, "Bottom row layout id %s", bottomRowPlugin.getId());
       GenericRowKeyboard rowKeyboard =
           new GenericRowKeyboard(
@@ -335,72 +322,6 @@ public abstract class AnyKeyboard extends Keyboard {
   }
 
   public abstract boolean isAlphabetKeyboard();
-
-  @KeyboardExtension.KeyboardExtensionScope
-  public int getKeyboardScope() {
-    return isAlphabetKeyboard()
-        ? KeyboardExtension.SCOPE_ALPHABET
-        : KeyboardExtension.SCOPE_SYMBOLS;
-  }
-
-  /**
-   * Returns this keyboard's add-on as a {@link KeyboardAddOnAndBuilder}, or {@code null} if the
-   * add-on is not of that type (e.g. {@link GenericKeyboard}). Centralizes the cast that the
-   * radical-IME helpers below all need.
-   */
-  @Nullable
-  private KeyboardAddOnAndBuilder asExternalAddOn() {
-    final AddOn addOn = getKeyboardAddOn();
-    return (addOn instanceof KeyboardAddOnAndBuilder) ? (KeyboardAddOnAndBuilder) addOn : null;
-  }
-
-  /**
-   * Returns true if this keyboard's add-on declares {@code hasRadicalInput="true"} (i.e. it is a
-   * radical-based IME like Boshiamy, Cangjie, Zhuyin). Returns false for non-external keyboards
-   * (e.g. {@link GenericKeyboard}).
-   */
-  public boolean isRadicalKeyboard() {
-    final KeyboardAddOnAndBuilder addOn = asExternalAddOn();
-    return addOn != null && addOn.getHasRadicalInput();
-  }
-
-  /**
-   * Returns true if {@code primaryCode} is a key the radical-input engine should consume into the
-   * radical buffer (per the per-keyboard {@code radicalChars}/{@code radicalKeyCodeRange}
-   * configuration). Returns false for non-radical keyboards.
-   */
-  public boolean isRadicalKeyCode(int primaryCode) {
-    final KeyboardAddOnAndBuilder addOn = asExternalAddOn();
-    return addOn != null && addOn.isRadicalKeyCode(primaryCode);
-  }
-
-  /**
-   * Returns true if this keyboard's add-on declares {@code asciiOnlyPopups="true"}, in which case
-   * non-ASCII codepoints in long-press popup strings should be stripped (CJK / radical IMEs).
-   */
-  public boolean isAsciiOnlyPopups() {
-    final KeyboardAddOnAndBuilder addOn = asExternalAddOn();
-    return addOn != null && addOn.getAsciiOnlyPopups();
-  }
-
-  /**
-   * Returns the per-keyboard candidate-selector key sequence (e.g. {@code "vrsfwlcbkj"} for
-   * Boshiamy's 2nd–10th candidate picks) or {@code null} if this keyboard does not advertise the
-   * feature.
-   */
-  @Nullable
-  public String getRadicalCandidateSelectorKeys() {
-    final KeyboardAddOnAndBuilder addOn = asExternalAddOn();
-    return addOn != null ? addOn.getRadicalCandidateSelectorKeys() : null;
-  }
-
-  /**
-   * Returns true if this keyboard supports gesture (swipe) typing. Defaults to true for standard
-   * alphabetic keyboards, and false for radical keyboards or keyboards that explicitly opt out.
-   */
-  public boolean supportsGestureTyping() {
-    return isAlphabetKeyboard() && mSupportsGestureTyping;
-  }
 
   private void fixKeyboardDueToGenericRow(
       @NonNull GenericRowKeyboard genericRowKeyboard, final boolean isTopRow) {
@@ -796,8 +717,7 @@ public abstract class AnyKeyboard extends Keyboard {
       boolean mShiftCodesAlwaysOverride = false;
 
       final int[] remoteStyleableArrayFromLocal =
-          resourceMapping.getRemoteStyleableArrayFromLocal(
-              com.anysoftkeyboard.api.R.styleable.KeyboardLayout_Key);
+          resourceMapping.getRemoteStyleableArrayFromLocal(R.styleable.KeyboardLayout_Key);
       TypedArray a =
           keyboardContext.obtainStyledAttributes(
               Xml.asAttributeSet(parser), remoteStyleableArrayFromLocal);
@@ -808,37 +728,48 @@ public abstract class AnyKeyboard extends Keyboard {
             resourceMapping.getLocalAttrId(remoteStyleableArrayFromLocal[remoteIndex]);
 
         try {
-          if (localAttrId == com.anysoftkeyboard.api.R.attr.shiftedCodes) {
-            mShiftedCodes = KeyboardSupport.getKeyCodesFromTypedArray(a, remoteIndex);
-          } else if (localAttrId == com.anysoftkeyboard.api.R.attr.longPressCode) {
-            longPressCode = a.getInt(remoteIndex, 0);
-          } else if (localAttrId == com.anysoftkeyboard.api.R.attr.isFunctional) {
-            mFunctionalKey = a.getBoolean(remoteIndex, false);
-          } else if (localAttrId == com.anysoftkeyboard.api.R.attr.shiftedKeyLabel) {
-            shiftedKeyLabel = a.getString(remoteIndex);
-          } else if (localAttrId == com.anysoftkeyboard.api.R.attr.isShiftAlways) {
-            mShiftCodesAlwaysOverride = true;
-            mShiftCodesAlways = a.getBoolean(remoteIndex, false);
-          } else if (localAttrId == com.anysoftkeyboard.api.R.attr.hintLabel) {
-            hintLabel = a.getString(remoteIndex);
-          } else if (localAttrId == com.anysoftkeyboard.api.R.attr.showInLayout) {
-            //noinspection WrongConstant
-            showKeyInLayout = a.getInt(remoteIndex, SHOW_KEY_ALWAYS);
-          } else if (localAttrId == com.anysoftkeyboard.api.R.attr.tags) {
-            String tags = a.getString(remoteIndex);
-            if (!TextUtils.isEmpty(tags)) {
-              mKeyTags = Arrays.asList(tags.split(","));
-            }
-          } else if (localAttrId == com.anysoftkeyboard.api.R.attr.genders) {
-            String genders = a.getString(remoteIndex);
-            if (!TextUtils.isEmpty(genders)) {
-              mKeyGenders = stringsToEnum(EmojiUtils.Gender.class, genders);
-            }
-          } else if (localAttrId == com.anysoftkeyboard.api.R.attr.skinTones) {
-            String tones = a.getString(remoteIndex);
-            if (!TextUtils.isEmpty(tones)) {
-              mKeySkinTones = stringsToEnum(EmojiUtils.SkinTone.class, tones);
-            }
+          switch (localAttrId) {
+            case R.attr.shiftedCodes:
+              mShiftedCodes = KeyboardSupport.getKeyCodesFromTypedArray(a, remoteIndex);
+              break;
+            case R.attr.longPressCode:
+              longPressCode = a.getInt(remoteIndex, 0);
+              break;
+            case R.attr.isFunctional:
+              mFunctionalKey = a.getBoolean(remoteIndex, false);
+              break;
+            case R.attr.shiftedKeyLabel:
+              shiftedKeyLabel = a.getString(remoteIndex);
+              break;
+            case R.attr.isShiftAlways:
+              mShiftCodesAlwaysOverride = true;
+              mShiftCodesAlways = a.getBoolean(remoteIndex, false);
+              break;
+            case R.attr.hintLabel:
+              hintLabel = a.getString(remoteIndex);
+              break;
+            case R.attr.showInLayout:
+              //noinspection WrongConstant
+              showKeyInLayout = a.getInt(remoteIndex, SHOW_KEY_ALWAYS);
+              break;
+            case R.attr.tags:
+              String tags = a.getString(remoteIndex);
+              if (!TextUtils.isEmpty(tags)) {
+                mKeyTags = Arrays.asList(tags.split(","));
+              }
+              break;
+            case R.attr.genders:
+              String genders = a.getString(remoteIndex);
+              if (!TextUtils.isEmpty(genders)) {
+                mKeyGenders = stringsToEnum(EmojiUtils.Gender.class, genders);
+              }
+              break;
+            case R.attr.skinTones:
+              String tones = a.getString(remoteIndex);
+              if (!TextUtils.isEmpty(tones)) {
+                mKeySkinTones = stringsToEnum(EmojiUtils.SkinTone.class, tones);
+              }
+              break;
           }
         } catch (Exception e) {
           Logger.w(TAG, "Failed to set data from XML!", e);

@@ -1,157 +1,215 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-     Copyright (C) 2016 Menny Even-Danan
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
-
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
     android:fillViewport="true"
-    android:paddingTop="@dimen/global_content_padding_bottom"
-    android:paddingBottom="@dimen/global_content_padding_bottom"
+    android:paddingTop="12dp"
+    android:paddingBottom="24dp"
     android:scrollbarStyle="outsideOverlay">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/global_content_padding_side"
-        android:paddingRight="@dimen/global_content_padding_side">
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/keyboard_demo_shadow">
-
-
-            <com.anysoftkeyboard.keyboards.views.DemoAnyKeyboardView
-                android:id="@+id/demo_keyboard_view"
-                android:layout_width="match_parent"
-                android:layout_height="200dp" />
-
-            <TextView
-                android:id="@+id/ask_social_link"
-                style="@style/Ask.Text.Small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top|start"
-                android:layout_margin="8dp"
-                android:autoLink="web"
-                android:drawablePadding="6dp"
-                android:padding="8dp"
-                android:text="@string/ime_name"
-                android:textStyle="bold"
-                app:drawableStartCompat="@drawable/ic_go_to_website"
-                app:drawableLeftCompat="@drawable/ic_go_to_website" />
-
-        </FrameLayout>
-
-        <!-- this box will be should shown
-         only if the build type is not release -->
+        <!-- Keyboard Preview Card -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/testing_build_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:layout_marginTop="8dp"
-            android:visibility="gone">
+            app:cardBackgroundColor="@color/app_card_background"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp">
 
-            <TextView
-                style="@style/Ask.Text.Normal"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:autoLink="web"
-                android:padding="8dp"
-                android:text="@string/beta_tester_message"
-                android:textColor="?android:textColorSecondary" />
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.anysoftkeyboard.keyboards.views.DemoAnyKeyboardView
+                        android:id="@+id/demo_keyboard_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="210dp" />
+
+                    <!-- Keep for compatibility, hidden -->
+                    <TextView
+                        android:id="@+id/ask_social_link"
+                        style="@style/Ask.Text.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ime_name"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/menu_divider" />
+
+                <!-- Quick Test Input Field -->
+                <EditText
+                    android:id="@+id/test_typing_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_margin="12dp"
+                    android:background="@drawable/modern_input_background"
+                    android:hint="@string/test_typing_hint"
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine"
+                    android:paddingStart="14dp"
+                    android:paddingLeft="14dp"
+                    android:paddingEnd="14dp"
+                    android:paddingRight="14dp"
+                    android:textColor="?android:textColorPrimary"
+                    android:textColorHint="?android:textColorSecondary"
+                    android:textSize="15sp" />
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-
-        <!-- this box will be should shown
-         only if the keyboard is not fully enabled in the system. -->
+        <!-- Setup Required Banner Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/not_configured_click_here_root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:layout_marginTop="8dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/app_card_background"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp">
 
-            <TextView
-                android:id="@+id/not_configured_click_here"
-                style="@style/Ask.Text.Normal"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:drawablePadding="6dp"
-                android:padding="8dp"
-                android:text="@string/not_configured_with_click_here"
-                android:textColor="?android:textColorSecondary"
-                android:textSize="@dimen/font_size_sub_title"
-                app:drawableStartCompat="@drawable/ic_not_configured_animation"
-                app:drawableLeftCompat="@drawable/ic_not_configured_animation" />
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    style="@style/Ask.Text.Large.Bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/setup_required_title" />
+
+                <TextView
+                    style="@style/Ask.Text.Normal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:text="@string/setup_required_desc"
+                    android:textColor="?android:textColorSecondary" />
+
+                <TextView
+                    android:id="@+id/not_configured_click_here"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:background="@drawable/modern_button_primary"
+                    android:clickable="true"
+                    android:drawableStart="@drawable/ic_not_configured_animation"
+                    android:drawableLeft="@drawable/ic_not_configured_animation"
+                    android:drawablePadding="8dp"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="@string/not_configured_with_click_here"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- this box will be should shown
-         only if we do not have permissions to post notifications. -->
+        <!-- Notification Permission Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/no_notifications_permission_click_here_root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:layout_marginTop="8dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/app_card_background"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp">
 
-            <TextView
-                style="@style/Ask.Text.Normal"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:drawablePadding="6dp"
-                android:padding="8dp"
-                android:text="@string/not_notification_permission_text"
-                android:textColor="?android:textColorSecondary"
-                app:drawableTopCompat="@drawable/ic_notification_perm_required" />
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="8dp"
+                    android:contentDescription="@string/not_notification_permission_text"
+                    android:src="@drawable/ic_notification_perm_required"
+                    app:tint="@color/app_accent" />
+
+                <TextView
+                    style="@style/Ask.Text.Normal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="@string/not_notification_permission_text"
+                    android:textColor="?android:textColorSecondary" />
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <!-- ChangeLog / Updates Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/latest_change_log_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            app:cardBackgroundColor="@color/app_card_background"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp" />
 
-        <!-- this box will be should shown
-         only if the build type is not release -->
+        <!-- Testing / Beta boxes (kept for tests, default gone) -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/testing_build_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/app_card_background"
+            app:cardCornerRadius="16dp">
+
+            <TextView
+                style="@style/Ask.Text.Normal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="@string/beta_tester_message"
+                android:textColor="?android:textColorSecondary" />
+        </androidx.cardview.widget.CardView>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/beta_sign_up"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:layout_marginTop="8dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/app_card_background"
+            app:cardCornerRadius="16dp">
 
             <TextView
                 style="@style/Ask.Text.Normal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:autoLink="web"
                 android:padding="8dp"
                 android:text="@string/ask_beta_link_promo"
                 android:textColor="?android:textColorSecondary" />

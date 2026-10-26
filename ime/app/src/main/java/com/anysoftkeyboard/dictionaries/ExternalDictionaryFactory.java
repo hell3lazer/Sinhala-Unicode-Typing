@@ -30,6 +30,7 @@ import com.anysoftkeyboard.keyboards.KeyboardFactory;
 import com.anysoftkeyboard.prefs.DirectBootAwareSharedPreferences;
 import com.menny.android.anysoftkeyboard.AnyApplication;
 import com.menny.android.anysoftkeyboard.BuildConfig;
+import com.menny.android.anysoftkeyboard.R;
 import io.reactivex.Observable;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,25 +45,10 @@ public class ExternalDictionaryFactory extends AddOnsFactory<DictionaryAddOnAndB
   private static final String XML_ASSETS_ATTRIBUTE = "dictionaryAssertName";
   private static final String XML_RESOURCE_ATTRIBUTE = "dictionaryResourceId";
   private static final String XML_AUTO_TEXT_RESOURCE_ATTRIBUTE = "autoTextResourceId";
-  private static final String XML_RADICAL_DICT_RESOURCE_ATTRIBUTE = "radicalDictionaryResId";
-  private static final String XML_RADICAL_PHRASES_RESOURCE_ATTRIBUTE = "radicalPhrasesResId";
-  private static final String XML_HOMOPHONES_RESOURCE_ATTRIBUTE = "homophonesResId";
-  private static final String XML_CHAR_TO_PHONETIC_RESOURCE_ATTRIBUTE = "charToPhoneticResId";
-  private static final String XML_CHAR_TO_RADICAL_RESOURCE_ATTRIBUTE = "charToRadicalResId";
-  private static final String XML_EXCLUDE_HOMOPHONE_CHARS_RESOURCE_ATTRIBUTE =
-      "excludeHomophoneCharsResId";
-  private static final String XML_INCLUDE_CHARS_RESOURCE_ATTRIBUTE = "includeCharsResId";
-  private static final String XML_CHAR_FREQUENCY_RESOURCE_ATTRIBUTE = "charFrequencyResId";
-  private static final String XML_CANDIDATE_CONVERSION_RESOURCE_ATTRIBUTE =
-      "candidateConversionResId";
-  private static final String XML_SPLIT_MULTI_CODEPOINT_CANDIDATES_ATTRIBUTE =
-      "splitMultiCodepointCandidates";
   private static final String XML_INITIAL_SUGGESTIONS_ARRAY_RESOURCE_ATTRIBUTE =
       "initialSuggestions";
-  private static final String XML_SUPPORTS_GESTURE_TYPING_ATTRIBUTE = "supportsGestureTyping";
 
   private final Map<String, DictionaryAddOnAndBuilder> mBuildersByLocale = new ArrayMap<>();
-  private final RadicalOverlayCache mRadicalOverlayCache = new RadicalOverlayCache();
 
   public ExternalDictionaryFactory(Context context) {
     super(
@@ -74,7 +60,7 @@ public class ExternalDictionaryFactory extends AddOnsFactory<DictionaryAddOnAndB
         "Dictionaries",
         "Dictionary",
         "dictionary_",
-        com.anysoftkeyboard.language.english.pack.R.xml.english_dictionaries,
+        R.xml.sinhala_dictionaries,
         0,
         true,
         BuildConfig.TESTING_BUILD);
@@ -130,16 +116,6 @@ public class ExternalDictionaryFactory extends AddOnsFactory<DictionaryAddOnAndB
     throw new UnsupportedOperationException("This is not supported for dictionaries.");
   }
 
-  /**
-   * Returns the per-process cache that holds materialised user-supplied radical-overlay byte
-   * snapshots. Settings UI code calls {@link RadicalOverlayCache#invalidateAll()} when the user
-   * picks a new overlay folder or taps "refresh imported tables".
-   */
-  @NonNull
-  public RadicalOverlayCache getRadicalOverlayCache() {
-    return mRadicalOverlayCache;
-  }
-
   @Override
   protected DictionaryAddOnAndBuilder createConcreteAddOn(
       Context askContext,
@@ -158,105 +134,50 @@ public class ExternalDictionaryFactory extends AddOnsFactory<DictionaryAddOnAndB
     final int autoTextResId =
         attrs.getAttributeResourceValue(
             null, XML_AUTO_TEXT_RESOURCE_ATTRIBUTE, AddOn.INVALID_RES_ID);
-    final int radicalDictResId =
-        attrs.getAttributeResourceValue(
-            null, XML_RADICAL_DICT_RESOURCE_ATTRIBUTE, AddOn.INVALID_RES_ID);
-    final int radicalPhrasesResId =
-        attrs.getAttributeResourceValue(
-            null, XML_RADICAL_PHRASES_RESOURCE_ATTRIBUTE, AddOn.INVALID_RES_ID);
-    final int homophonesResId =
-        attrs.getAttributeResourceValue(
-            null, XML_HOMOPHONES_RESOURCE_ATTRIBUTE, AddOn.INVALID_RES_ID);
-    final int charToPhoneticResId =
-        attrs.getAttributeResourceValue(
-            null, XML_CHAR_TO_PHONETIC_RESOURCE_ATTRIBUTE, AddOn.INVALID_RES_ID);
-    final int charToRadicalResId =
-        attrs.getAttributeResourceValue(
-            null, XML_CHAR_TO_RADICAL_RESOURCE_ATTRIBUTE, AddOn.INVALID_RES_ID);
-    final int excludeHomophoneCharsResId =
-        attrs.getAttributeResourceValue(
-            null, XML_EXCLUDE_HOMOPHONE_CHARS_RESOURCE_ATTRIBUTE, AddOn.INVALID_RES_ID);
-    final int includeCharsResId =
-        attrs.getAttributeResourceValue(
-            null, XML_INCLUDE_CHARS_RESOURCE_ATTRIBUTE, AddOn.INVALID_RES_ID);
-    final int charFrequencyResId =
-        attrs.getAttributeResourceValue(
-            null, XML_CHAR_FREQUENCY_RESOURCE_ATTRIBUTE, AddOn.INVALID_RES_ID);
-    final int candidateConversionResId =
-        attrs.getAttributeResourceValue(
-            null, XML_CANDIDATE_CONVERSION_RESOURCE_ATTRIBUTE, AddOn.INVALID_RES_ID);
-    final boolean splitMultiCodepointCandidates =
-        attrs.getAttributeBooleanValue(null, XML_SPLIT_MULTI_CODEPOINT_CANDIDATES_ATTRIBUTE, false);
     final int initialSuggestionsId =
         attrs.getAttributeResourceValue(
             null, XML_INITIAL_SUGGESTIONS_ARRAY_RESOURCE_ATTRIBUTE, AddOn.INVALID_RES_ID);
     // asserting
     if ((language == null)
-        || ((assets == null)
-            && (dictionaryResourceId == AddOn.INVALID_RES_ID)
-            && (radicalDictResId == AddOn.INVALID_RES_ID))) {
+        || ((assets == null) && (dictionaryResourceId == AddOn.INVALID_RES_ID))) {
       Logger.e(
           TAG,
-          "External dictionary is missing both a binary dictionary and a radical dictionary"
-              + " (language=%s, dictionaryResourceId=%s, radicalDictResId=%s, hasAssets=%s)."
-              + " Will not create dictionary.",
-          language,
-          dictionaryResourceId,
-          radicalDictResId,
-          assets != null);
+          "External dictionary does not include all mandatory details! Will not create"
+              + " dictionary.");
       return null;
     } else {
-      final RadicalDictionaryConfig radicalConfig =
-          new RadicalDictionaryConfig.Builder()
-              .radicalDictResId(radicalDictResId)
-              .radicalPhrasesResId(radicalPhrasesResId)
-              .homophonesResId(homophonesResId)
-              .charToPhoneticResId(charToPhoneticResId)
-              .charToRadicalResId(charToRadicalResId)
-              .excludeHomophoneCharsResId(excludeHomophoneCharsResId)
-              .includeCharsResId(includeCharsResId)
-              .charFrequencyResId(charFrequencyResId)
-              .candidateConversionResId(candidateConversionResId)
-              .splitMultiCodepointCandidates(splitMultiCodepointCandidates)
-              .build();
+      final DictionaryAddOnAndBuilder creator;
+      if (dictionaryResourceId == AddOn.INVALID_RES_ID)
+        creator =
+            new DictionaryAddOnAndBuilder(
+                askContext,
+                context,
+                apiVersion,
+                prefId,
+                name,
+                description,
+                isHidden,
+                sortIndex,
+                language,
+                assets,
+                initialSuggestionsId);
+      else
+        creator =
+            new DictionaryAddOnAndBuilder(
+                askContext,
+                context,
+                apiVersion,
+                prefId,
+                name,
+                description,
+                isHidden,
+                sortIndex,
+                language,
+                dictionaryResourceId,
+                autoTextResId,
+                initialSuggestionsId);
 
-      final boolean supportsGestureTyping =
-          attrs.getAttributeBooleanValue(
-              null, XML_SUPPORTS_GESTURE_TYPING_ATTRIBUTE, !radicalConfig.hasRadicalDictionary());
-
-      if (dictionaryResourceId == AddOn.INVALID_RES_ID) {
-        return new DictionaryAddOnAndBuilder(
-            askContext,
-            context,
-            apiVersion,
-            prefId,
-            name,
-            description,
-            isHidden,
-            sortIndex,
-            language,
-            assets,
-            autoTextResId,
-            initialSuggestionsId,
-            supportsGestureTyping,
-            radicalConfig);
-      } else {
-        return new DictionaryAddOnAndBuilder(
-            askContext,
-            context,
-            apiVersion,
-            prefId,
-            name,
-            description,
-            isHidden,
-            sortIndex,
-            language,
-            dictionaryResourceId,
-            autoTextResId,
-            initialSuggestionsId,
-            supportsGestureTyping,
-            radicalConfig);
-      }
+      return creator;
     }
   }
 

@@ -115,9 +115,6 @@ public abstract class ChewbaccaUncaughtExceptionHandler implements UncaughtExcep
 
   @Override
   public void uncaughtException(@NonNull Thread thread, Throwable ex) {
-    if (ex instanceof io.reactivex.exceptions.UndeliverableException && ex.getCause() != null) {
-      ex = ex.getCause();
-    }
     ex.printStackTrace();
     Logger.e(TAG, "Caught an unhandled exception!!!", ex);
 
@@ -150,11 +147,7 @@ public abstract class ChewbaccaUncaughtExceptionHandler implements UncaughtExcep
         .append(NEW_LINE)
         .append("******************************")
         .append(NEW_LINE)
-        .append(ex.getClass().getName());
-    if (ex.getCause() != null) {
-      reportMessage.append(" [Root cause: ").append(ex.getCause().getClass().getName()).append("]");
-    }
-    reportMessage
+        .append(ex.getClass().getName())
         .append(NEW_LINE)
         .append("****** Exception message: ")
         .append(ex.getMessage())

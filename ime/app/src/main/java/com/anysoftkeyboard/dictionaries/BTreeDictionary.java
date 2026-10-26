@@ -208,11 +208,9 @@ public abstract class BTreeDictionary extends EditableDictionary {
   @Override
   public void getSuggestions(final KeyCodesProvider codes, final Dictionary.WordCallback callback) {
     if (isLoading() || isClosed()) return;
-    synchronized (mResourceMonitor) {
-      mInputLength = codes.codePointCount();
-      mMaxDepth = mInputLength * 2;
-      getWordsRec(mRoots, codes, mWordBuilder, 0, false, 1.0f, 0, callback);
-    }
+    mInputLength = codes.codePointCount();
+    mMaxDepth = mInputLength * 2;
+    getWordsRec(mRoots, codes, mWordBuilder, 0, false, 1.0f, 0, callback);
   }
 
   @Override
@@ -228,9 +226,7 @@ public abstract class BTreeDictionary extends EditableDictionary {
    */
   public final int getWordFrequency(CharSequence word) {
     if (isLoading() || isClosed()) return 0;
-    synchronized (mResourceMonitor) {
-      return getWordFrequencyRec(mRoots, word, 0, word.length());
-    }
+    return getWordFrequencyRec(mRoots, word, 0, word.length());
   }
 
   private int getWordFrequencyRec(

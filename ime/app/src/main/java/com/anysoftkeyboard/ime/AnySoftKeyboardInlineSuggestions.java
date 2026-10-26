@@ -55,17 +55,6 @@ public abstract class AnySoftKeyboardInlineSuggestions extends AnySoftKeyboardSu
     return super.handleCloseRequest() || cleanUpInlineLayouts(true);
   }
 
-  @Override
-  protected boolean hasStuffToClose() {
-    return super.hasStuffToClose() || isInlineSuggestionsShowing();
-  }
-
-  protected boolean isInlineSuggestionsShowing() {
-    final var inputViewContainer = getInputViewContainer();
-    return inputViewContainer != null
-        && inputViewContainer.findViewById(R.id.inline_suggestions_list) != null;
-  }
-
   @RequiresApi(Build.VERSION_CODES.R)
   @Nullable
   @Override
@@ -136,7 +125,6 @@ public abstract class AnySoftKeyboardInlineSuggestions extends AnySoftKeyboardSu
           instanceof ScrollViewAsMainChild lister) {
         lister.removeAllListItems();
         inputViewContainer.removeView(lister);
-        updateBackCallbackState();
         return true;
       }
     }
@@ -184,7 +172,6 @@ public abstract class AnySoftKeyboardInlineSuggestions extends AnySoftKeyboardSu
     }
 
     actualInputView.setVisibility(View.GONE);
-    updateBackCallbackState();
     return null;
   }
 

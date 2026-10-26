@@ -25,12 +25,12 @@
     android:supportsSwitchingToNextInputMethod="true"
     tools:targetApi="r">
     <subtype
-        android:icon="@drawable/ic_status_english"
+        android:icon="@drawable/ic_status_sinhala"
         android:subtypeId="0x720477C9"
         android:imeSubtypeExtraValue="@string/settings_default_keyboard_id"
         android:imeSubtypeMode="keyboard"
         android:isAsciiCapable="true"
-        android:name="@string/english_keyboard"
+        android:name="@string/sinhala_keyboard"
         android:label="@string/label_subtype_generic"
         android:overridesImplicitlyEnabledSubtype="true" />
 </input-method>

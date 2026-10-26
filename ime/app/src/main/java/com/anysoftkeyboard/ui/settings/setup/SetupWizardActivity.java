@@ -31,7 +31,6 @@ import androidx.viewpager2.widget.ViewPager2;
 import app.cash.copper.rx2.RxContentResolver;
 import com.anysoftkeyboard.permissions.PermissionRequestHelper;
 import com.anysoftkeyboard.rx.RxSchedulers;
-import com.menny.android.anysoftkeyboard.AnyApplication;
 import com.menny.android.anysoftkeyboard.R;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
@@ -71,18 +70,14 @@ public class SetupWizardActivity extends AppCompatActivity {
   @NonNull
   @VisibleForTesting
   protected FragmentStateAdapter createPagesAdapter() {
-    return new WizardPagesAdapter(
-        this,
-        !SetupSupport.hasLanguagePackForCurrentLocale(
-            AnyApplication.getKeyboardFactory(getApplicationContext()).getAllAddOns()));
+    return new WizardPagesAdapter(this, false);
   }
 
   @Override
   protected void onPostCreate(@Nullable Bundle savedInstanceState) {
     super.onPostCreate(savedInstanceState);
     // applying my very own Edge-Effect color
-    EdgeEffectHacker.brandGlowEffect(
-        this, ContextCompat.getColor(this, net.evendanan.pixel.R.color.app_accent));
+    EdgeEffectHacker.brandGlowEffect(this, ContextCompat.getColor(this, R.color.app_accent));
   }
 
   @Override

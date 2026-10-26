@@ -2,13 +2,14 @@
 
 To develop this project, you'll need:
 
-- Java - get [OpenJDK](https://jdk.java.net/) or [Eclipse Temurin](https://adoptium.net/temurin/releases/). If you are using [jEnv](https://www.jenv.be/) then we have a `.java-version` file already set up.
-  - Do not hard-code the version here: the source-of-truth is `.java-version` and the CI setup (see `actions/setup-java` `java-version` in `.github/workflows/checks.yml`), plus `compileOptions` in `gradle/android_general.gradle` and `jvmTarget` in `buildSrc/build.gradle`.
+- Java 17 - get [OpenJDK](https://jdk.java.net/archive/) or [AdoptOpenJDK](https://adoptopenjdk.net/releases.html?variant=openjdk17&jvmVariant=hotspot). If you are using [jEnv](https://www.jenv.be/) then we have a `.java-version` file already set up.
 - git
-- A recent [Android Studio](https://developer.android.com/studio/install) version that supports the Android Gradle Plugin version declared in `gradle/libs.versions.toml` (`agp`).
+- [Android Studio](https://developer.android.com/studio/install) version 4.0.
 - You will need to point your Android-Studio to use the installed Java. You can configure the path inside Android Studio menu: File > Project Structure > JDK Location.
-- Android SDK. Do not rely on a version number written here: the source-of-truth is `gradle/libs.versions.toml` (`sdkMinimum`, `sdkTarget`, `sdkCompile`, `androidBuildTools`), wired via `gradle/root_all_projects_ext.gradle` and `gradle/android_general.gradle` (`compileSdkVersion`, `minSdkVersion`, `targetSdkVersion`).
-- Android NDK. Do not rely on a version number written here: the source-of-truth is `sideBySideNdkVersion` in `gradle/root_all_projects_ext.gradle` (installed automatically as a side-by-side NDK package, no `ndk.dir` in `local.properties` needed).
+- Android SDK API Level 28 installed.
+  - Set up `local.properties` file to point to it (that is, ensure you have `sdk.dir=/path/to/android/sdk` in it).
+- Android NDK [r14b](https://developer.android.com/ndk/downloads/older_releases.html) installed.
+  Set up `local.properties` file to point to it (that is, ensure you have `ndk.dir=/path/to/android/ndk` in it).
 
 ## Continuous Integration and Pull-Requests Verifications
 

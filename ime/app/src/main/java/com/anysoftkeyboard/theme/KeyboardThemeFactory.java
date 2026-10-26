@@ -18,7 +18,6 @@ package com.anysoftkeyboard.theme;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import androidx.annotation.NonNull;
 import com.anysoftkeyboard.addons.AddOn;
@@ -52,7 +51,7 @@ public class KeyboardThemeFactory extends AddOnsFactory.SingleAddOnsFactory<Keyb
         "KeyboardThemes",
         "KeyboardTheme",
         PREF_ID_PREFIX,
-        com.anysoftkeyboard.addons.keyboardthemes.R.xml.keyboard_themes,
+        R.xml.keyboard_themes,
         R.string.settings_default_keyboard_theme_key,
         true,
         BuildConfig.TESTING_BUILD);
@@ -128,8 +127,7 @@ public class KeyboardThemeFactory extends AddOnsFactory.SingleAddOnsFactory<Keyb
               emitter.setCancellable(() -> sp.unregisterOnSharedPreferenceChangeListener(listener));
               sp.registerOnSharedPreferenceChangeListener(listener);
             })
-        .filter(
-            key -> !TextUtils.isEmpty(key) && key.startsWith(KeyboardThemeFactory.PREF_ID_PREFIX))
+        .filter(key -> key.startsWith(KeyboardThemeFactory.PREF_ID_PREFIX))
         .map(key -> factory.getEnabledAddOn())
         .startWith(factory.getEnabledAddOn())
         .distinctUntilChanged();

@@ -19,22 +19,18 @@ package com.anysoftkeyboard.keyboards.views;
 import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.anysoftkeyboard.base.utils.Logger;
 import com.anysoftkeyboard.keyboards.AnyKeyboard.AnyKey;
 import com.anysoftkeyboard.keyboards.Keyboard;
 import com.anysoftkeyboard.keyboards.views.AnyKeyboardViewBase.KeyPressTimingHandler;
 import java.util.Locale;
 
 class PointerTracker {
-  private static final String TAG = "PointerTracker";
-
   static class SharedPointerTrackersData {
     int lastSentKeyIndex = NOT_A_KEY;
 
     int delayBeforeKeyRepeatStart;
     int longPressKeyTimeout;
     int multiTapKeyTimeout;
-    boolean applyTouchTrajectoryCorrection = true;
   }
 
   interface UIProxy {
@@ -51,11 +47,6 @@ class PointerTracker {
 
   // Miscellaneous constants
   private static final int NOT_A_KEY = AnyKeyboardViewBase.NOT_A_KEY;
-  private static final long FAST_TAP_THRESHOLD_MS = 80L;
-  private static final float VELOCITY_HYSTERESIS_MULTIPLIER_SQUARED = 2.25f; // 1.5x distance
-  private static final float DOWNWARD_BIAS_MULTIPLIER_SQUARED = 1.44f; // 1.2x distance
-  private static final float BLEND_DOWN_WEIGHT = 0.6f;
-  private static final float BLEND_UP_WEIGHT = 0.4f;
 
   private final UIProxy mProxy;
   private final KeyPressTimingHandler mHandler;
@@ -86,11 +77,6 @@ class PointerTracker {
 
   // pressed key
   private int mPreviousKey = NOT_A_KEY;
-
-  // Touch trajectory start coordinates and time
-  private int mStartX;
-  private int mStartY;
-  private long mDownTime;
 
   // This class keeps track of a key index and a position where this pointer is.
   private static class KeyState {
@@ -253,9 +239,6 @@ class PointerTracker {
   //    }
 
   void onDownEvent(int x, int y, long eventTime) {
-    mStartX = x;
-    mStartY = y;
-    mDownTime = eventTime;
     int keyIndex = mKeyState.onDownKey(x, y);
     mKeyboardLayoutHasBeenChanged = false;
     mKeyAlreadyProcessed = false;
@@ -328,7 +311,7 @@ class PointerTracker {
         }
         keyState.onMoveToNewKey(keyIndex, x, y);
         startLongPressTimer(keyIndex);
-      } else if (!isMinorMoveBounce(x, y, keyIndex, eventTime)) {
+      } else if (!isMinorMoveBounce(x, y, keyIndex)) {
         // The pointer has been slid in to the new key from the previous key, we must call
         // onRelease() first to notify that the previous key has been released, then call
         // onPress() to notify that the new key is being pressed.
@@ -358,7 +341,7 @@ class PointerTracker {
         }
       }
     } else {
-      if (oldKey != null && !isMinorMoveBounce(x, y, keyIndex, eventTime)) {
+      if (oldKey != null && !isMinorMoveBounce(x, y, keyIndex)) {
         // The pointer has been slid out from the previous key, we must call onRelease() to
         // notify that the previous key has been released.
         if (mListener != null) {
@@ -377,7 +360,6 @@ class PointerTracker {
 
   void onUpEvent(int x, int y, long eventTime) {
     final OnKeyboardActionListener listener = mListener;
-    final int oldKeyIndex = mPreviousKey;
     mHandler.cancelAllMessages();
     mProxy.hidePreview(mKeyState.getKeyIndex(), this);
     showKeyPreviewAndUpdateKey(NOT_A_KEY);
@@ -385,31 +367,11 @@ class PointerTracker {
       return;
     }
     int keyIndex = mKeyState.onUpKey(x, y);
-    if (isMinorMoveBounce(x, y, keyIndex, eventTime)) {
-      int downKeyIndex = mKeyState.getKeyIndex();
-      if (downKeyIndex != keyIndex) {
-        Logger.d(
-            TAG,
-            "onUpEvent: Touch trajectory corrected key index %d to down-key %d",
-            keyIndex,
-            downKeyIndex);
-      }
+    if (isMinorMoveBounce(x, y, keyIndex)) {
       // Use previous fixed key index and coordinates.
-      keyIndex = downKeyIndex;
+      keyIndex = mKeyState.getKeyIndex();
       x = mKeyState.getKeyX();
       y = mKeyState.getKeyY();
-    } else if (mSharedPointerTrackersData.applyTouchTrajectoryCorrection
-        && !isInGestureTyping()
-        && (eventTime - mDownTime) <= FAST_TAP_THRESHOLD_MS) {
-      x = Math.round(BLEND_DOWN_WEIGHT * mStartX + BLEND_UP_WEIGHT * x);
-      y = Math.round(BLEND_DOWN_WEIGHT * mStartY + BLEND_UP_WEIGHT * y);
-      keyIndex = mKeyState.onUpKey(x, y);
-    }
-    if (listener != null && isValidKeyIndex(oldKeyIndex) && oldKeyIndex != keyIndex) {
-      Keyboard.Key oldKey = getKey(oldKeyIndex);
-      if (oldKey != null) {
-        listener.onRelease(oldKey.getCodeAtIndex(0, mKeyDetector.isKeyShifted(oldKey)));
-      }
     }
     if (mIsRepeatableKey) {
       // we just need to report up
@@ -461,21 +423,12 @@ class PointerTracker {
     return mKeyState.getLastY();
   }
 
-  private boolean isMinorMoveBounce(int x, int y, int newKey, long eventTime) {
+  private boolean isMinorMoveBounce(int x, int y, int newKey) {
     int curKey = mKeyState.getKeyIndex();
     if (newKey == curKey) {
       return true;
     } else if (isValidKeyIndex(curKey)) {
-      float thresholdMultiplierSquared = 1.0f;
-      if (mSharedPointerTrackersData.applyTouchTrajectoryCorrection
-          && (eventTime - mDownTime) <= FAST_TAP_THRESHOLD_MS) {
-        thresholdMultiplierSquared *= VELOCITY_HYSTERESIS_MULTIPLIER_SQUARED;
-        if (y > mStartY) {
-          thresholdMultiplierSquared *= DOWNWARD_BIAS_MULTIPLIER_SQUARED;
-        }
-      }
-      return getSquareDistanceToKeyEdge(x, y, mKeys[curKey])
-          < (mKeyHysteresisDistanceSquared * thresholdMultiplierSquared);
+      return getSquareDistanceToKeyEdge(x, y, mKeys[curKey]) < mKeyHysteresisDistanceSquared;
     } else {
       return false;
     }
