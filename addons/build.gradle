@@ -4,10 +4,10 @@ autoVersioning {
     enabled = rootProject.hasProperty("withAutoVersioning")
     buildCounterEnvKey = "BUILD_COUNT_FOR_VERSION"
     major = 1
-    minor = 0
+    minor = 1
     buildCounterOffset = 0
-    patchOffset = -1
-    defaultBuildCount = 1
+    patchOffset = -2
+    defaultBuildCount = 2
 }
 
 afterEvaluate {

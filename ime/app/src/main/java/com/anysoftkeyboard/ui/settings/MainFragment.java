@@ -111,7 +111,7 @@ public class MainFragment extends Fragment {
             () ->
                 Navigation.findNavController(requireView())
                     .navigate(MainFragmentDirections.actionMainFragmentToFullChangeLogFragment()));
-    latestChangeLogCard.addView(latestChangeLogCardContent);
+    latestChangeLogCard.setVisibility(View.GONE);
     View testingView = view.findViewById(R.id.testing_build_message);
     testingView.setVisibility(View.GONE);
     View testerSignUp = view.findViewById(R.id.beta_sign_up);
@@ -218,7 +218,7 @@ public class MainFragment extends Fragment {
   @Override
   public void onStart() {
     super.onStart();
-    UiUtils.setActivityTitle(this, R.string.how_to_pointer_title);
+    UiUtils.setActivityTitle(this, R.string.bottom_nav_home);
 
     View notConfiguredBox = getView().findViewById(R.id.not_configured_click_here_root);
     // checking if the IME is configured
@@ -253,7 +253,7 @@ public class MainFragment extends Fragment {
       if (ContextCompat.checkSelfPermission(
               requireContext(), Manifest.permission.POST_NOTIFICATIONS)
           != PackageManager.PERMISSION_GRANTED) {
-        mNoNotificationPermissionView.setVisibility(View.VISIBLE);
+        mNoNotificationPermissionView.setVisibility(View.GONE);
       }
     }
   }

@@ -7,7 +7,7 @@
     </string>
     <string name="debug_tracing_finished">ලුහුබැඳීම අවසන්!\nට්‍රේස් ගොනුව\u0020<xliff:g id="trace_file">%s</xliff:g>වේ</string>
     <string name="menu_about_item">පිලිබඳව</string>
-    <string name="how_to_pointer_title">AnySoftKeyboard වෙත සාදරයෙන් පිළිගනිමු</string>
+    <string name="how_to_pointer_title">මුල් පිටුව</string>
     <string name="change_log_card_version_title_template">\u0020\u0020v<xliff:g id="name">%s</xliff:g>\u0020\u0020සඳහා නවතම වෙනස්කම්</string>
     <string name="change_log_url">තවත්:\u0020<xliff:g id="url">%s</xliff:g></string>
     <string name="notification_text_testers">මෙය බීටා අනුවාදයකි. පරිස්සමෙන් භාවිතා කරන්න!</string>
@@ -643,7 +643,7 @@
     <string name="next_word_dict_settings">ඊළඟ වචන සැකසුම්</string>
     <string name="next_word_settings_group">සැකසුම්</string>
     <string name="next_word_stats_group">ඊළඟ වචන භාවිත සංඛ්‍යාලේඛන</string>
-    <string name="next_words_statistics_count">ආරම්භක වචන ගණන:\u0020<xliff:g id="first_word">%d</xliff:g>\nසාමාන්‍ය ඊළඟ වචන ගණන:\u0020<xliff:g id="second_word">%d</xliff:g></string>
+    <string name="next_words_statistics_count">ආරම්භක වචන ගණන:\u0020<xliff:g id="first_word">%1$d</xliff:g>\nසාමාන්‍ය ඊළඟ වචන ගණන:\u0020<xliff:g id="second_word">%2$d</xliff:g></string>
     <string name="next_words_statistics_no_usage">තවමත් භාවිතයක් නොමැත. තව ටිකක් ටයිප් කරන්න.</string>
     <string name="clipboard_is_empty_toast">පසුරු පුවරුව හිස්ය, ඇලවීමට කිසිවක් නැත.</string>
     <string name="clipboard_copy_done_toast">තෝරාගත් පෙළ පසුරු පුවරුවට පිටපත් කරන ලදී.</string>
@@ -682,7 +682,7 @@
     <string name="keyboard_for_url_fields_summary">URL/ඊමේල් ක්ෂේත්‍රවල ඇති විට, මෙම පිරිසැලසුම භාවිතා කරනු ඇත. දැනට, %s</string>
     <string name="keyboard_for_url_fields_title">URL ආදානය සඳහා පිරිසැලසුම තෝරන්න</string>
     <string name="no_internet_fields_specific_layout">කිසිවක් නැත</string>
-    <string name="bottom_nav_home">ආයුබෝවන්</string>
+    <string name="bottom_nav_home">මුල් පිටුව</string>
     <string name="setup_wizard_welcome_title">සාදරයෙන් පිළිගනිමු!</string>
     <string name="setup_wizard_welcome_sub_title">AnySoftKeyboard උත්සාහ කිරීමට ඔබට ස්තුතියි!
     </string>

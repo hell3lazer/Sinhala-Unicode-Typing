@@ -1,18 +1,18 @@
-rootProject.name = 'AnySoftKeyboard'
+rootProject.name = 'SinhalaUnicodeTyping'
 
 include ':api'
 
 include ':junit-sharding'
 
-include ':addons:base', ':addons:base:apk'
+include ':addons:base'
 include ':addons:languages'
 include ':addons:languages:english', ':addons:languages:english:pack'
 
-include ':addons:languages:sinhala:pack', ':addons:languages:sinhala:apk'
+include ':addons:languages:sinhala:pack'
 
 //list of quick-text should be alphabetized-ordered
 include ':addons:quicktexts'
-include ':addons:quicktexts:bbcodes:pack', ':addons:quicktexts:bbcodes:apk'
+include ':addons:quicktexts:bbcodes:pack'
 
 include ':ime'
 include ':ime:base', ':ime:base-rx', ':ime:base-test', ':ime:prefs'
