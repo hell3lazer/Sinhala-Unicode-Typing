@@ -1,42 +1,84 @@
-# Development
+# Contributing to Sinhala Unicode Typing
 
-To develop this project, you'll need:
+Thank you for your interest in contributing to **Sinhala Unicode Typing**! Whether reporting an issue, proposing an improvement, or contributing code, your help is appreciated.
 
-- Java 17 - get [OpenJDK](https://jdk.java.net/archive/) or [AdoptOpenJDK](https://adoptopenjdk.net/releases.html?variant=openjdk17&jvmVariant=hotspot). If you are using [jEnv](https://www.jenv.be/) then we have a `.java-version` file already set up.
-- git
-- [Android Studio](https://developer.android.com/studio/install) version 4.0.
-- You will need to point your Android-Studio to use the installed Java. You can configure the path inside Android Studio menu: File > Project Structure > JDK Location.
-- Android SDK API Level 28 installed.
-  - Set up `local.properties` file to point to it (that is, ensure you have `sdk.dir=/path/to/android/sdk` in it).
-- Android NDK [r14b](https://developer.android.com/ndk/downloads/older_releases.html) installed.
-  Set up `local.properties` file to point to it (that is, ensure you have `ndk.dir=/path/to/android/ndk` in it).
+---
 
-## Continuous Integration and Pull-Requests Verifications
+## Code of Conduct
 
-Each PR is verified by multiple tasks:
+All contributors and participants are expected to adhere to our [Code of Conduct](CODE_OF_CONDUCT.md). Please treat fellow contributors with respect and kindness.
 
-- Static-Analysis is done with checkstyle, lint and Error-Prone. Run `./scripts/ci/ci_check.sh` to execute all checks.
-- Unit-Tests are verified using `./gradlew testDebugUnitTest`.
+---
 
-## Components
+## Development Environment Setup
 
-- Main app (AnySoftKeyboard) is located under `ime/`.
-  - to build the APK use following command: `gradlew :ime:app:assembleDebug`
-- All add-ons are under `addons/`.
-  - Language-packs are under `addons/languages/`.
-  - Themes are under `addons/themes/`.
-  - Quick-Text (e.g., emojis) are under `addons/quicktext/`.
-  - Contributing document for add-ons can be found [here](addons/CONTRIBUTING.md).
+To build and develop Sinhala Unicode Typing, ensure you have:
 
-# License
+- **Java Development Kit (JDK)**: OpenJDK 21 installed.
+- **Android SDK**: API Level 35 (with Build Tools).
+- **Git**: Installed and configured.
+- **Android Studio**: Android Studio Ladybug or later recommended.
 
-The components in this repository are released under the [Apache2](https://www.apache.org/licenses/LICENSE-2.0) license.
-By contributing to this repository you give all copyright and distribution rights or AnySoftKeyboard maintainer.<br/>
-Of course, since this is Apache2, you may fork and do whatever you want with the code, you do not have to share back only give attribute.<br/>
-Read more about this license [here](<https://tldrlegal.com/license/apache-license-2.0-(apache-2.0)>).
+Make sure your `local.properties` file points to your Android SDK installation:
+```properties
+sdk.dir=/path/to/android/sdk
+```
 
-# Contributors
+---
 
-If you decided to help out and contribute your time, we are greatly appreciate this.
-Our contributors list can be found [here](CONTRIBUTORS.md).
-Contributors should adhere to the [Code of Conduct](CODE_OF_CONDUCT.md) document.
+## Project Structure
+
+- `ime/`: Core keyboard application modules.
+  - `ime/app/`: The primary application module (`com.sinhala.unicode.typing`).
+  - `ime/pixel/`: Material theme styles, palettes, day/night resources, and custom UI views.
+  - `ime/base/` & `ime/base-rx/`: Base keyboard logic, reactive event pipelines, and core state handling.
+  - `ime/dictionaries/`: Dictionary loaders and word suggestion logic.
+  - `ime/gesturetyping/`: Glide and gesture typing algorithms.
+- `addons/`: Add-on modules including the dedicated Sinhala language pack under `addons/languages/sinhala/`.
+
+---
+
+## Building the Project
+
+Always use the Gradle wrapper:
+
+- **Build Debug APK**:
+  ```bash
+  ./gradlew :ime:app:assembleDebug
+  ```
+- **Build Release APK**:
+  ```bash
+  ./gradlew :ime:app:assembleRelease
+  ```
+  *(Note: Do not run `./gradlew build` directly, as it triggers non-Android lifecycle tasks. Use `assembleDebug` or `assembleRelease` instead).*
+
+---
+
+## Code Style & Formatting
+
+We use [Spotless](https://github.com/diffplug/spotless) to maintain clean and consistent formatting across all Java, Kotlin, and XML resources.
+
+Before submitting code, always run the auto-formatter:
+```bash
+./gradlew spotlessApply
+```
+
+---
+
+## Running Tests
+
+To run unit tests across modules:
+```bash
+./gradlew :ime:base-rx:testDebugUnitTest
+```
+
+When running tests in the `:ime:app` module, use a specific test filter:
+```bash
+./gradlew :ime:app:testDebugUnitTest --tests "com.anysoftkeyboard.keyboards.views.preview.KeyPreviewsManagerTest"
+```
+
+---
+
+## License
+
+Sinhala Unicode Typing is distributed under the [Apache License, Version 2.0](LICENSE). By contributing to this repository, you agree that your contributions are licensed under the same Apache 2.0 terms.
